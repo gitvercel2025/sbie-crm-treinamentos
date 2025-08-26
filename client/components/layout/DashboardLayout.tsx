@@ -17,6 +17,8 @@ import {
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  selectedTraining?: string;
+  onTrainingSelect?: (training: string) => void;
 }
 
 interface NavigationItem {
@@ -41,7 +43,7 @@ const trainingItems = [
   "Conexão 2020",
   "Desperte o seu talento",
   "Embaixadores do Bem",
-  "Forma��ão em Inteligência Emocional",
+  "Formação em Inteligência Emocional",
   "Formação Master em Inteligência Emocional",
   "Imersão Inside",
   "Inteligência Emocional Online",
