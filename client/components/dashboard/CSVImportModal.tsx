@@ -174,15 +174,38 @@ export default function CSVImportModal({ open, onOpenChange, onImport }: CSVImpo
       const reader = new FileReader();
       reader.onload = (e) => {
         const text = e.target?.result as string;
+
+        // Use the same parsing logic as preview
+        const parseCSVLine = (line: string) => {
+          const result = [];
+          let current = '';
+          let inQuotes = false;
+
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if ((char === ',' || char === ';') && !inQuotes) {
+              result.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          result.push(current.trim());
+          return result;
+        };
+
         const lines = text.split('\n').filter(line => line.trim() !== '');
-        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-        
+        const headers = parseCSVLine(lines[0]).map(h => h.replace(/"/g, ''));
+
         const students: Student[] = [];
         const importErrors: string[] = [];
 
         for (let i = 1; i < lines.length; i++) {
-          const row = lines[i].split(',').map(cell => cell.trim().replace(/"/g, ''));
-          
+          const row = parseCSVLine(lines[i]).map(cell => cell.replace(/"/g, ''));
+
           try {
             const nomeIndex = headers.indexOf(fieldMapping.nome);
             const celularIndex = headers.indexOf(fieldMapping.celular);
@@ -192,23 +215,40 @@ export default function CSVImportModal({ open, onOpenChange, onImport }: CSVImpo
             const celular = row[celularIndex]?.trim();
             const email = row[emailIndex]?.trim();
 
-            if (!nome || !celular || !email) {
-              importErrors.push(`Linha ${i + 1}: dados incompletos`);
+            // Validate required fields
+            if (!nome || nome === '') {
+              importErrors.push(`Linha ${i + 1}: nome obrigatório`);
               continue;
             }
 
+            if (!celular || celular === '') {
+              importErrors.push(`Linha ${i + 1}: celular obrigatório`);
+              continue;
+            }
+
+            if (!email || email === '' || !email.includes('@')) {
+              importErrors.push(`Linha ${i + 1}: email inválido`);
+              continue;
+            }
+
+            // Clean and format phone number
+            const cleanPhone = celular.replace(/\D/g, '');
+            const formattedPhone = cleanPhone.startsWith('55') ?
+              `+${cleanPhone}` :
+              cleanPhone.length === 11 ? `+55${cleanPhone}` : celular;
+
             students.push({
-              id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-              nome,
-              celular,
-              email,
-              treinamento: selectedTraining === "custom" ? customTraining : selectedTraining,
+              id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+              nome: nome.trim(),
+              celular: formattedPhone,
+              email: email.trim().toLowerCase(),
+              treinamento: selectedTraining === "custom" ? customTraining.trim() : selectedTraining,
             });
 
-            // Simulate progress
+            // Update progress
             setUploadProgress((i / (lines.length - 1)) * 100);
           } catch (error) {
-            importErrors.push(`Linha ${i + 1}: erro ao processar dados`);
+            importErrors.push(`Linha ${i + 1}: erro ao processar dados - ${error}`);
           }
         }
 
