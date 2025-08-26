@@ -23,8 +23,14 @@ export default function Index() {
   const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
   const [selectedTraining, setSelectedTraining] = useState<string>("all");
 
+  // Filter students by selected training
+  const filteredStudents = selectedTraining === "all"
+    ? students
+    : students.filter(s => s.treinamento === selectedTraining);
+
   // Calculate stats
   const totalStudents = students.length;
+  const filteredCount = filteredStudents.length;
   const uniqueTrainings = new Set(students.map(s => s.treinamento)).size;
   
   // Chart data
@@ -135,7 +141,10 @@ export default function Index() {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      selectedTraining={selectedTraining}
+      onTrainingSelect={setSelectedTraining}
+    >
       <div className="space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -261,7 +270,7 @@ export default function Index() {
 
         {/* Students Table */}
         <StudentsTable
-          students={students}
+          students={filteredStudents}
           onEdit={handleEditStudent}
           onDelete={handleDeleteStudent}
           onWhatsApp={handleWhatsAppStudent}
