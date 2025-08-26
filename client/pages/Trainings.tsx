@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  BookOpen, 
-  Users, 
-  Calendar, 
+import EditTrainingModal, { Training } from "@/components/dashboard/EditTrainingModal";
+import DeleteTrainingConfirmDialog from "@/components/dashboard/DeleteTrainingConfirmDialog";
+import { useToast } from "@/hooks/use-toast";
+import {
+  BookOpen,
+  Users,
+  Calendar,
   Clock,
   TrendingUp,
   Plus,
@@ -14,16 +17,6 @@ import {
   Trash2
 } from "lucide-react";
 
-interface Training {
-  id: string;
-  name: string;
-  description: string;
-  students: number;
-  status: "active" | "inactive" | "planned";
-  startDate: string;
-  duration: string;
-  instructor: string;
-}
 
 const TRAINING_LIST = [
   "ASBIE",
@@ -46,19 +39,57 @@ const TRAINING_LIST = [
   "Workshop Mulheres",
 ];
 
+// Helper functions for localStorage
+const getTrainingsFromStorage = (): Training[] => {
+  try {
+    const stored = localStorage.getItem('sbie-trainings');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (error) {
+    console.error('Error loading trainings from localStorage:', error);
+  }
+
+  // Return default trainings if no stored data
+  return TRAINING_LIST.map((name, index) => ({
+    id: `training-${index}`,
+    name,
+    description: `Curso focado em desenvolvimento de inteligência emocional através de ${name.toLowerCase()}`,
+    students: Math.floor(Math.random() * 50) + 10,
+    status: ["active", "inactive", "planned"][Math.floor(Math.random() * 3)] as Training["status"],
+    startDate: new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0],
+    duration: ["4 semanas", "6 semanas", "8 semanas", "12 semanas"][Math.floor(Math.random() * 4)],
+    instructor: ["Ana Silva", "Carlos Santos", "Maria Oliveira", "João Costa"][Math.floor(Math.random() * 4)],
+  }));
+};
+
+const saveTrainingsToStorage = (trainings: Training[]) => {
+  try {
+    localStorage.setItem('sbie-trainings', JSON.stringify(trainings));
+  } catch (error) {
+    console.error('Error saving trainings to localStorage:', error);
+  }
+};
+
 export default function Trainings() {
-  const [trainings] = useState<Training[]>(
-    TRAINING_LIST.map((name, index) => ({
-      id: `training-${index}`,
-      name,
-      description: `Curso focado em desenvolvimento de inteligência emocional através de ${name.toLowerCase()}`,
-      students: Math.floor(Math.random() * 50) + 10, // Placeholder - will be replaced with real data
-      status: ["active", "inactive", "planned"][Math.floor(Math.random() * 3)] as Training["status"],
-      startDate: new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toLocaleDateString(),
-      duration: ["4 semanas", "6 semanas", "8 semanas", "12 semanas"][Math.floor(Math.random() * 4)],
-      instructor: ["Ana Silva", "Carlos Santos", "Maria Oliveira", "João Costa"][Math.floor(Math.random() * 4)],
-    }))
-  );
+  const [trainings, setTrainings] = useState<Training[]>([]);
+  const [editingTraining, setEditingTraining] = useState<Training | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deletingTraining, setDeletingTraining] = useState<Training | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { toast } = useToast();
+
+  // Load trainings from localStorage on component mount
+  useEffect(() => {
+    setTrainings(getTrainingsFromStorage());
+  }, []);
+
+  // Save trainings to localStorage whenever trainings change
+  useEffect(() => {
+    if (trainings.length > 0) {
+      saveTrainingsToStorage(trainings);
+    }
+  }, [trainings]);
 
   const getStatusColor = (status: Training["status"]) => {
     switch (status) {
@@ -89,6 +120,67 @@ export default function Trainings() {
   const activeTrainings = trainings.filter(t => t.status === "active").length;
   const totalStudents = trainings.reduce((sum, t) => sum + t.students, 0);
 
+  // Handler functions
+  const handleEditTraining = (training: Training) => {
+    setEditingTraining(training);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteTraining = (training: Training) => {
+    setDeletingTraining(training);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleSaveTraining = (training: Training) => {
+    setTrainings(prev => {
+      const existingIndex = prev.findIndex(t => t.id === training.id);
+      if (existingIndex >= 0) {
+        // Update existing training
+        const updated = [...prev];
+        updated[existingIndex] = training;
+        toast({
+          title: "Treinamento atualizado",
+          description: `${training.name} foi atualizado com sucesso.`,
+        });
+        return updated;
+      } else {
+        // Add new training
+        toast({
+          title: "Treinamento criado",
+          description: `${training.name} foi criado com sucesso.`,
+        });
+        return [...prev, training];
+      }
+    });
+  };
+
+  const confirmDeleteTraining = () => {
+    if (deletingTraining) {
+      setTrainings(prev => prev.filter(t => t.id !== deletingTraining.id));
+      toast({
+        title: "Treinamento excluído",
+        description: `${deletingTraining.name} foi excluído com sucesso.`,
+        variant: "destructive",
+      });
+      setDeletingTraining(null);
+      setIsDeleteDialogOpen(false);
+    }
+  };
+
+  const handleNewTraining = () => {
+    setEditingTraining(null);
+    setIsEditModalOpen(true);
+  };
+
+  const formatDisplayDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR');
+    } catch {
+      return dateString;
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
@@ -103,7 +195,10 @@ export default function Trainings() {
             </p>
           </div>
           <div className="mt-4 sm:mt-0">
-            <Button className="bg-sbie-brown hover:bg-sbie-brown/80">
+            <Button
+              onClick={handleNewTraining}
+              className="bg-sbie-brown hover:bg-sbie-brown/80"
+            >
               <Plus className="mr-2 h-4 w-4" />
               Novo Treinamento
             </Button>
@@ -186,10 +281,20 @@ export default function Trainings() {
                     </Badge>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" className="text-sbie-brown hover:bg-sbie-brown/10">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEditTraining(training)}
+                      className="text-sbie-brown hover:bg-sbie-brown/10"
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-red-600 hover:bg-red-50">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteTraining(training)}
+                      className="text-red-600 hover:bg-red-50"
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -209,7 +314,7 @@ export default function Trainings() {
                   
                   <div className="flex items-center text-sm text-sbie-green-olive">
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>Início: {training.startDate}</span>
+                    <span>Início: {formatDisplayDate(training.startDate)}</span>
                   </div>
                   
                   <div className="flex items-center text-sm text-sbie-green-olive">
@@ -236,6 +341,21 @@ export default function Trainings() {
             </Card>
           ))}
         </div>
+
+        {/* Modals */}
+        <EditTrainingModal
+          training={editingTraining}
+          open={isEditModalOpen}
+          onOpenChange={setIsEditModalOpen}
+          onSave={handleSaveTraining}
+        />
+
+        <DeleteTrainingConfirmDialog
+          training={deletingTraining}
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onConfirm={confirmDeleteTraining}
+        />
       </div>
     </DashboardLayout>
   );
