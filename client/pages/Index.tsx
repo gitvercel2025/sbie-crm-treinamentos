@@ -33,21 +33,24 @@ export default function Index() {
   const filteredCount = filteredStudents.length;
   const uniqueTrainings = new Set(students.map(s => s.treinamento)).size;
   
-  // Chart data
+  // Chart data - always show all trainings data for overview
   const trainingData = students.reduce((acc, student) => {
     const training = acc.find(t => t.name === student.treinamento);
     if (training) {
       training.students += 1;
     } else {
-      acc.push({ 
-        name: student.treinamento.length > 20 ? 
-          student.treinamento.substring(0, 20) + "..." : 
-          student.treinamento, 
-        students: 1 
+      acc.push({
+        name: student.treinamento.length > 25 ?
+          student.treinamento.substring(0, 25) + "..." :
+          student.treinamento,
+        students: 1
       });
     }
     return acc;
   }, [] as { name: string; students: number }[]);
+
+  // Sort by number of students (descending)
+  trainingData.sort((a, b) => b.students - a.students);
 
   const handleEditStudent = (student: Student) => {
     setSelectedStudent(student);
