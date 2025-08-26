@@ -1,62 +1,243 @@
-import { DemoResponse } from "@shared/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import StatsCard from "@/components/dashboard/StatsCard";
+import TrainingChart from "@/components/dashboard/TrainingChart";
+import StudentsTable, { Student } from "@/components/dashboard/StudentsTable";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, BookOpen, TrendingUp, Award, Upload, Download } from "lucide-react";
+
+// Sample data - in a real app this would come from CSV files
+const sampleStudents: Student[] = [
+  {
+    id: "1",
+    nome: "Ana Silva Santos",
+    celular: "+55 11 99999-1234",
+    email: "ana.silva@email.com",
+    treinamento: "Formação em Inteligência Emocional"
+  },
+  {
+    id: "2",
+    nome: "Carlos Eduardo Oliveira",
+    celular: "+55 11 98888-5678",
+    email: "carlos.eduardo@email.com",
+    treinamento: "Formação Master em Inteligência Emocional"
+  },
+  {
+    id: "3",
+    nome: "Mariana Costa",
+    celular: "+55 11 97777-9012",
+    email: "mariana.costa@email.com",
+    treinamento: "Inteligência Emocional Online"
+  },
+  {
+    id: "4",
+    nome: "Roberto Fernandes",
+    celular: "+55 11 96666-3456",
+    email: "roberto.fernandes@email.com",
+    treinamento: "Lotus Inteligência Emocional"
+  },
+  {
+    id: "5",
+    nome: "Juliana Rodrigues",
+    celular: "+55 11 95555-7890",
+    email: "juliana.rodrigues@email.com",
+    treinamento: "Superação Emocional"
+  },
+  {
+    id: "6",
+    nome: "Fernando Santos",
+    celular: "+55 11 94444-1234",
+    email: "fernando.santos@email.com",
+    treinamento: "Conexão 2020"
+  },
+  {
+    id: "7",
+    nome: "Camila Ferreira",
+    celular: "+55 11 93333-5678",
+    email: "camila.ferreira@email.com",
+    treinamento: "Formação em Inteligência Emocional"
+  },
+  {
+    id: "8",
+    nome: "Diego Almeida",
+    celular: "+55 11 92222-9012",
+    email: "diego.almeida@email.com",
+    treinamento: "Desperte o seu talento"
+  }
+];
 
 export default function Index() {
-  const [exampleFromServer, setExampleFromServer] = useState("");
-  // Fetch users on component mount
-  useEffect(() => {
-    fetchDemo();
-  }, []);
+  const [students, setStudents] = useState<Student[]>(sampleStudents);
 
-  // Example of how to fetch data from the server (if needed)
-  const fetchDemo = async () => {
-    try {
-      const response = await fetch("/api/demo");
-      const data = (await response.json()) as DemoResponse;
-      setExampleFromServer(data.message);
-    } catch (error) {
-      console.error("Error fetching hello:", error);
+  // Calculate stats
+  const totalStudents = students.length;
+  const uniqueTrainings = new Set(students.map(s => s.treinamento)).size;
+  
+  // Chart data
+  const trainingData = students.reduce((acc, student) => {
+    const training = acc.find(t => t.name === student.treinamento);
+    if (training) {
+      training.students += 1;
+    } else {
+      acc.push({ 
+        name: student.treinamento.length > 20 ? 
+          student.treinamento.substring(0, 20) + "..." : 
+          student.treinamento, 
+        students: 1 
+      });
     }
+    return acc;
+  }, [] as { name: string; students: number }[]);
+
+  const handleEditStudent = (student: Student) => {
+    console.log("Edit student:", student);
+    // TODO: Implement edit functionality
+  };
+
+  const handleDeleteStudent = (id: string) => {
+    setStudents(prev => prev.filter(s => s.id !== id));
+  };
+
+  const handleWhatsAppStudent = (student: Student) => {
+    console.log("WhatsApp student:", student);
+  };
+
+  const handleImportCSV = () => {
+    console.log("Import CSV");
+    // TODO: Implement CSV import
+  };
+
+  const handleExportCSV = () => {
+    console.log("Export CSV");
+    // TODO: Implement CSV export
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="text-center">
-        {/* TODO: FUSION_GENERATION_APP_PLACEHOLDER replace everything here with the actual app! */}
-        <h1 className="text-2xl font-semibold text-slate-800 flex items-center justify-center gap-3">
-          <svg
-            className="animate-spin h-8 w-8 text-slate-400"
-            viewBox="0 0 50 50"
-          >
-            <circle
-              className="opacity-30"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-            />
-            <circle
-              className="text-slate-600"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-              strokeDasharray="100"
-              strokeDashoffset="75"
-            />
-          </svg>
-          Generating your app...
-        </h1>
-        <p className="mt-4 text-slate-600 max-w-md">
-          Watch the chat on the left for updates that might need your attention
-          to finish generating
-        </p>
-        <p className="mt-4 hidden max-w-md">{exampleFromServer}</p>
+    <DashboardLayout>
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-sbie-green-dark">
+              Dashboard SBIE CRM
+            </h1>
+            <p className="mt-2 text-sbie-green-gray">
+              Gerencie os alunos da Sociedade Brasileira de Inteligência Emocional
+            </p>
+          </div>
+          <div className="mt-4 sm:mt-0 flex gap-3">
+            <Button 
+              onClick={handleImportCSV}
+              className="bg-sbie-brown hover:bg-sbie-brown/80"
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Importar CSV
+            </Button>
+            <Button 
+              onClick={handleExportCSV}
+              variant="outline" 
+              className="border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Exportar
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatsCard
+            title="Total de Alunos"
+            value={totalStudents.toLocaleString()}
+            change={{ value: "+12% este mês", trend: "up" }}
+            icon={Users}
+            color="green"
+          />
+          <StatsCard
+            title="Treinamentos Ativos"
+            value={uniqueTrainings}
+            change={{ value: "+2 novos", trend: "up" }}
+            icon={BookOpen}
+            color="brown"
+          />
+          <StatsCard
+            title="Taxa de Conversão"
+            value="87.5%"
+            change={{ value: "+5.2%", trend: "up" }}
+            icon={TrendingUp}
+            color="olive"
+          />
+          <StatsCard
+            title="Certificados Emitidos"
+            value="1,247"
+            change={{ value: "45 hoje", trend: "up" }}
+            icon={Award}
+            color="beige"
+          />
+        </div>
+
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TrainingChart data={trainingData} type="bar" />
+          
+          {/* Recent Activity */}
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold text-sbie-green-dark">
+                Atividade Recente
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/30">
+                  <div className="w-2 h-2 rounded-full bg-sbie-brown mt-2"></div>
+                  <div>
+                    <p className="text-sm font-medium text-sbie-green-dark">
+                      Novo aluno cadastrado
+                    </p>
+                    <p className="text-xs text-sbie-green-gray">
+                      Ana Silva se inscreveu em "Formação em IE" • há 2 horas
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/30">
+                  <div className="w-2 h-2 rounded-full bg-sbie-green-olive mt-2"></div>
+                  <div>
+                    <p className="text-sm font-medium text-sbie-green-dark">
+                      Certificado emitido
+                    </p>
+                    <p className="text-xs text-sbie-green-gray">
+                      Carlos Eduardo concluiu "Lotus IE" • há 4 horas
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/30">
+                  <div className="w-2 h-2 rounded-full bg-sbie-green-dark mt-2"></div>
+                  <div>
+                    <p className="text-sm font-medium text-sbie-green-dark">
+                      CSV importado
+                    </p>
+                    <p className="text-xs text-sbie-green-gray">
+                      125 novos alunos de "Workshop Mulheres" • há 6 horas
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Students Table */}
+        <StudentsTable
+          students={students}
+          onEdit={handleEditStudent}
+          onDelete={handleDeleteStudent}
+          onWhatsApp={handleWhatsAppStudent}
+        />
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
