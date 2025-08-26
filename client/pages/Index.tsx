@@ -276,43 +276,53 @@ export default function Index() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/30">
-                  <div className="w-2 h-2 rounded-full bg-sbie-brown mt-2"></div>
-                  <div>
-                    <p className="text-sm font-medium text-sbie-green-dark">
-                      Novo aluno cadastrado
-                    </p>
-                    <p className="text-xs text-sbie-green-gray">
-                      Ana Silva se inscreveu em "Formação em IE" • há 2 horas
-                    </p>
+              {activities.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-sbie-beige-light/30 flex items-center justify-center">
+                    <Users className="h-8 w-8 text-sbie-green-gray" />
                   </div>
+                  <p className="text-sm text-sbie-green-gray">
+                    Nenhuma atividade recente
+                  </p>
+                  <p className="text-xs text-sbie-green-gray mt-1">
+                    As atividades aparecerão aqui quando você começar a usar o sistema
+                  </p>
                 </div>
-                
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/30">
-                  <div className="w-2 h-2 rounded-full bg-sbie-green-olive mt-2"></div>
-                  <div>
-                    <p className="text-sm font-medium text-sbie-green-dark">
-                      Certificado emitido
-                    </p>
-                    <p className="text-xs text-sbie-green-gray">
-                      Carlos Eduardo concluiu "Lotus IE" • há 4 horas
-                    </p>
-                  </div>
+              ) : (
+                <div className="space-y-3">
+                  {activities.slice(0, 5).map((activity) => (
+                    <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/20 hover:bg-sbie-beige-light/30 transition-colors duration-200">
+                      <div className={`w-2 h-2 rounded-full mt-2 ${
+                        activity.type === 'student_added' ? 'bg-green-500' :
+                        activity.type === 'student_deleted' ? 'bg-red-500' :
+                        activity.type === 'csv_imported' ? 'bg-sbie-brown' :
+                        activity.type === 'student_edited' ? 'bg-sbie-green-olive' :
+                        'bg-sbie-green-gray'
+                      }`}></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-sbie-green-dark">
+                          {activity.message}
+                        </p>
+                        <div className="flex items-center justify-between mt-1">
+                          {activity.details && (
+                            <p className="text-xs text-sbie-green-gray">
+                              {activity.details}
+                            </p>
+                          )}
+                          <p className="text-xs text-sbie-green-gray ml-auto">
+                            {new Date(activity.timestamp).toLocaleString('pt-BR', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              day: '2-digit',
+                              month: '2-digit'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/30">
-                  <div className="w-2 h-2 rounded-full bg-sbie-green-dark mt-2"></div>
-                  <div>
-                    <p className="text-sm font-medium text-sbie-green-dark">
-                      CSV importado
-                    </p>
-                    <p className="text-xs text-sbie-green-gray">
-                      125 novos alunos de "Workshop Mulheres" • há 6 horas
-                    </p>
-                  </div>
-                </div>
-              </div>
+              )}
             </CardContent>
           </Card>
         </div>
