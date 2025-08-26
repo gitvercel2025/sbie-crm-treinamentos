@@ -71,6 +71,7 @@ const sampleStudents: Student[] = [
 
 export default function Index() {
   const [students, setStudents] = useState<Student[]>(sampleStudents);
+  const [importModalOpen, setImportModalOpen] = useState(false);
 
   // Calculate stats
   const totalStudents = students.length;
@@ -105,14 +106,39 @@ export default function Index() {
     console.log("WhatsApp student:", student);
   };
 
-  const handleImportCSV = () => {
-    console.log("Import CSV");
-    // TODO: Implement CSV import
+  const handleImportCSV = (newStudents: Student[], trainingName: string) => {
+    setStudents(prev => [...prev, ...newStudents]);
+    toast({
+      title: "Importação concluída",
+      description: `${newStudents.length} alunos importados para ${trainingName}`,
+    });
   };
 
   const handleExportCSV = () => {
-    console.log("Export CSV");
-    // TODO: Implement CSV export
+    const csvContent = [
+      ["Nome", "Celular", "Email", "Treinamento"].join(","),
+      ...students.map(student => [
+        `"${student.nome}"`,
+        `"${student.celular}"`,
+        `"${student.email}"`,
+        `"${student.treinamento}"`
+      ].join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `sbie-alunos-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Exportação concluída",
+      description: `${students.length} alunos exportados para CSV`,
+    });
   };
 
   return (
@@ -129,8 +155,8 @@ export default function Index() {
             </p>
           </div>
           <div className="mt-4 sm:mt-0 flex gap-3">
-            <Button 
-              onClick={handleImportCSV}
+            <Button
+              onClick={() => setImportModalOpen(true)}
               className="bg-sbie-brown hover:bg-sbie-brown/80"
             >
               <Upload className="mr-2 h-4 w-4" />
@@ -238,6 +264,13 @@ export default function Index() {
           onEdit={handleEditStudent}
           onDelete={handleDeleteStudent}
           onWhatsApp={handleWhatsAppStudent}
+        />
+
+        {/* CSV Import Modal */}
+        <CSVImportModal
+          open={importModalOpen}
+          onOpenChange={setImportModalOpen}
+          onImport={handleImportCSV}
         />
       </div>
     </DashboardLayout>
