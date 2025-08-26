@@ -15,6 +15,8 @@ import {
   Home,
   BookOpen,
   GraduationCap,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
