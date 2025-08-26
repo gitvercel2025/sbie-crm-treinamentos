@@ -189,30 +189,33 @@ export default function Index() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatsCard
-            title="Total de Alunos"
-            value={totalStudents.toLocaleString()}
-            change={{ value: "+12% este mês", trend: "up" }}
+            title={selectedTraining === "all" ? "Total de Alunos" : "Alunos no Filtro"}
+            value={filteredCount.toLocaleString()}
+            change={selectedTraining === "all" ?
+              { value: `${totalStudents} total`, trend: "neutral" } :
+              { value: `${totalStudents} no total`, trend: "neutral" }
+            }
             icon={Users}
             color="green"
           />
           <StatsCard
             title="Treinamentos Ativos"
             value={uniqueTrainings}
-            change={{ value: "+2 novos", trend: "up" }}
+            change={{ value: `${totalStudents} alunos`, trend: "up" }}
             icon={BookOpen}
             color="brown"
           />
           <StatsCard
-            title="Taxa de Conversão"
-            value="87.5%"
-            change={{ value: "+5.2%", trend: "up" }}
+            title="Média por Treinamento"
+            value={uniqueTrainings > 0 ? Math.round(totalStudents / uniqueTrainings) : 0}
+            change={{ value: "alunos/curso", trend: "neutral" }}
             icon={TrendingUp}
             color="olive"
           />
           <StatsCard
-            title="Certificados Emitidos"
-            value="1,247"
-            change={{ value: "45 hoje", trend: "up" }}
+            title="Treinamento Selecionado"
+            value={selectedTraining === "all" ? "Todos" : "1"}
+            change={{ value: selectedTraining === "all" ? "visualizando" : selectedTraining.substring(0, 20) + "...", trend: "neutral" }}
             icon={Award}
             color="beige"
           />
