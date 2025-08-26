@@ -14,6 +14,14 @@ import { Users, BookOpen, TrendingUp, Award, Upload, Download } from "lucide-rea
 // Start with empty student list - real data will be imported from CSV files
 const initialStudents: Student[] = [];
 
+interface Activity {
+  id: string;
+  type: 'student_added' | 'student_deleted' | 'csv_imported' | 'student_edited';
+  message: string;
+  timestamp: Date;
+  details?: string;
+}
+
 export default function Index() {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [importModalOpen, setImportModalOpen] = useState(false);
@@ -22,6 +30,7 @@ export default function Index() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
   const [selectedTraining, setSelectedTraining] = useState<string>("all");
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   // Filter students by selected training
   const filteredStudents = selectedTraining === "all"
