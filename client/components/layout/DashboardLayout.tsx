@@ -67,6 +67,7 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [trainingsOpen, setTrainingsOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -136,40 +137,52 @@ export default function DashboardLayout({
 
             {/* Trainings Section */}
             <div className="mt-8">
-              <h3 className="px-3 text-sm font-semibold text-sbie-green-gray uppercase tracking-wider mb-4">
-                Treinamentos
-              </h3>
-              <div className="space-y-1 max-h-72 overflow-y-auto scrollbar-thin scrollbar-track-sbie-green-dark scrollbar-thumb-sbie-green-olive hover:scrollbar-thumb-sbie-brown">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onTrainingSelect?.("all")}
-                  className={`w-full justify-start text-left text-sm p-3 rounded-lg transition-all duration-200 group ${
-                    selectedTraining === "all"
-                      ? "bg-sbie-brown text-white"
-                      : "text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white"
-                  }`}
-                >
-                  <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
-                  <span className="truncate font-medium">Todos os Treinamentos</span>
-                </Button>
-                {trainingItems.map((training) => (
-                  <Button
-                    key={training}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onTrainingSelect?.(training)}
-                    className={`w-full justify-start text-left text-sm p-3 rounded-lg transition-all duration-200 group ${
-                      selectedTraining === training
-                        ? "bg-sbie-brown text-white"
-                        : "text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white"
-                    }`}
-                  >
-                    <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
-                    <span className="truncate font-medium">{training}</span>
-                  </Button>
-                ))}
-              </div>
+              <Collapsible open={trainingsOpen} onOpenChange={setTrainingsOpen}>
+                <CollapsibleTrigger className="w-full">
+                  <div className="flex items-center justify-between px-3 py-2 text-sm font-semibold text-sbie-green-gray uppercase tracking-wider hover:bg-sbie-green-olive/20 rounded-lg transition-all duration-200">
+                    <span>Treinamentos</span>
+                    {trainingsOpen ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </div>
+                </CollapsibleTrigger>
+
+                <CollapsibleContent className="mt-2">
+                  <div className="space-y-1 max-h-64 overflow-y-auto scrollbar-thin scrollbar-track-sbie-green-dark scrollbar-thumb-sbie-green-olive hover:scrollbar-thumb-sbie-brown">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onTrainingSelect?.("all")}
+                      className={`w-full justify-start text-left text-sm p-3 rounded-lg transition-all duration-200 group ${
+                        selectedTraining === "all"
+                          ? "bg-sbie-brown text-white"
+                          : "text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white"
+                      }`}
+                    >
+                      <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
+                      <span className="truncate font-medium">Todos os Treinamentos</span>
+                    </Button>
+                    {trainingItems.map((training) => (
+                      <Button
+                        key={training}
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onTrainingSelect?.(training)}
+                        className={`w-full justify-start text-left text-sm p-3 rounded-lg transition-all duration-200 group ${
+                          selectedTraining === training
+                            ? "bg-sbie-brown text-white"
+                            : "text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white"
+                        }`}
+                      >
+                        <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
+                        <span className="truncate font-medium">{training}</span>
+                      </Button>
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
             </div>
           </nav>
         </div>
