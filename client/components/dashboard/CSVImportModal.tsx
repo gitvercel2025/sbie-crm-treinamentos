@@ -93,16 +93,40 @@ export default function CSVImportModal({ open, onOpenChange, onImport }: CSVImpo
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result as string;
+
+      // Better CSV parsing - handle different separators and quoted fields
       const lines = text.split('\n').filter(line => line.trim() !== '');
-      
+
       if (lines.length < 2) {
         setErrors(["O arquivo CSV deve conter pelo menos um cabeçalho e uma linha de dados."]);
         return;
       }
 
-      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-      const rows = lines.slice(1, 6).map(line => 
-        line.split(',').map(cell => cell.trim().replace(/"/g, ''))
+      // Parse CSV with better handling of quoted fields and different separators
+      const parseCSVLine = (line: string) => {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if ((char === ',' || char === ';') && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        result.push(current.trim());
+        return result;
+      };
+
+      const headers = parseCSVLine(lines[0]).map(h => h.replace(/"/g, ''));
+      const rows = lines.slice(1, Math.min(6, lines.length)).map(line =>
+        parseCSVLine(line).map(cell => cell.replace(/"/g, ''))
       );
 
       setCsvPreview({
@@ -111,15 +135,24 @@ export default function CSVImportModal({ open, onOpenChange, onImport }: CSVImpo
         rowCount: lines.length - 1,
       });
 
-      // Auto-detect field mappings
-      const lowerHeaders = headers.map(h => h.toLowerCase());
+      // Improved auto-detect field mappings
+      const lowerHeaders = headers.map(h => h.toLowerCase().normalize());
+
+      const findBestMatch = (patterns: string[]) => {
+        for (const pattern of patterns) {
+          const index = lowerHeaders.findIndex(h => h.includes(pattern));
+          if (index !== -1) return headers[index];
+        }
+        return "";
+      };
+
       setFieldMapping({
-        nome: headers[lowerHeaders.findIndex(h => h.includes('nome') || h.includes('name'))] || "",
-        celular: headers[lowerHeaders.findIndex(h => h.includes('celular') || h.includes('telefone') || h.includes('phone'))] || "",
-        email: headers[lowerHeaders.findIndex(h => h.includes('email') || h.includes('e-mail'))] || "",
+        nome: findBestMatch(['nome', 'name', 'aluno', 'estudante', 'participante']),
+        celular: findBestMatch(['celular', 'telefone', 'phone', 'tel', 'whatsapp', 'contato']),
+        email: findBestMatch(['email', 'e-mail', 'mail', 'correio']),
       });
     };
-    reader.readAsText(file);
+    reader.readAsText(file, 'UTF-8');
   };
 
   const handleImport = async () => {
