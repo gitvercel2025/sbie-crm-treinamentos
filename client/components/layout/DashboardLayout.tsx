@@ -41,7 +41,7 @@ const trainingItems = [
   "Conexão 2020",
   "Desperte o seu talento",
   "Embaixadores do Bem",
-  "Formação em Inteligência Emocional",
+  "Forma��ão em Inteligência Emocional",
   "Formação Master em Inteligência Emocional",
   "Imersão Inside",
   "Inteligência Emocional Online",
@@ -124,19 +124,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
             {/* Trainings Section */}
             <div className="mt-8">
-              <h3 className="px-3 text-sm font-semibold text-sbie-green-gray uppercase tracking-wider">
+              <h3 className="px-3 text-sm font-semibold text-sbie-green-gray uppercase tracking-wider mb-4">
                 Treinamentos
               </h3>
-              <div className="mt-3 space-y-1 max-h-64 overflow-y-auto">
+              <div className="space-y-1 max-h-72 overflow-y-auto scrollbar-thin scrollbar-track-sbie-green-dark scrollbar-thumb-sbie-green-olive hover:scrollbar-thumb-sbie-brown">
                 {trainingItems.map((training) => (
                   <Button
                     key={training}
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start text-left text-xs text-sbie-beige-light/80 hover:bg-sbie-green-olive hover:text-white p-2"
+                    className="w-full justify-start text-left text-sm text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white p-3 rounded-lg transition-all duration-200 group"
                   >
-                    <BookOpen className="mr-2 h-3 w-3 flex-shrink-0" />
-                    <span className="truncate">{training}</span>
+                    <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
+                    <span className="truncate font-medium">{training}</span>
                   </Button>
                 ))}
               </div>
