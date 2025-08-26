@@ -57,6 +57,20 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        sbie: {
+          beige: {
+            light: "hsl(var(--sbie-beige-light))",
+            DEFAULT: "hsl(var(--sbie-beige-light))",
+          },
+          brown: {
+            DEFAULT: "hsl(var(--sbie-brown))",
+          },
+          green: {
+            dark: "hsl(var(--sbie-green-dark))",
+            olive: "hsl(var(--sbie-green-olive))",
+            gray: "hsl(var(--sbie-green-gray))",
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
