@@ -32,6 +32,17 @@ export default function Index() {
   const [selectedTraining, setSelectedTraining] = useState<string>("all");
   const [activities, setActivities] = useState<Activity[]>([]);
 
+  const addActivity = (type: Activity['type'], message: string, details?: string) => {
+    const newActivity: Activity = {
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      type,
+      message,
+      timestamp: new Date(),
+      details,
+    };
+    setActivities(prev => [newActivity, ...prev.slice(0, 9)]); // Keep only last 10 activities
+  };
+
   // Filter students by selected training
   const filteredStudents = selectedTraining === "all"
     ? students
@@ -70,6 +81,11 @@ export default function Index() {
     setStudents(prev =>
       prev.map(s => s.id === updatedStudent.id ? updatedStudent : s)
     );
+    addActivity(
+      'student_edited',
+      `Aluno ${updatedStudent.nome} foi editado`,
+      `Treinamento: ${updatedStudent.treinamento}`
+    );
     toast({
       title: "Aluno atualizado",
       description: `${updatedStudent.nome} foi atualizado com sucesso`,
@@ -87,6 +103,11 @@ export default function Index() {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     };
     setStudents(prev => [...prev, studentWithId]);
+    addActivity(
+      'student_added',
+      `Novo aluno ${newStudent.nome} adicionado`,
+      `Treinamento: ${newStudent.treinamento}`
+    );
     toast({
       title: "Aluno adicionado",
       description: `${newStudent.nome} foi adicionado com sucesso`,
@@ -104,6 +125,11 @@ export default function Index() {
   const confirmDeleteStudent = () => {
     if (studentToDelete) {
       setStudents(prev => prev.filter(s => s.id !== studentToDelete.id));
+      addActivity(
+        'student_deleted',
+        `Aluno ${studentToDelete.nome} foi removido`,
+        `Treinamento: ${studentToDelete.treinamento}`
+      );
       toast({
         title: "Aluno excluído",
         description: `${studentToDelete.nome} foi removido do sistema`,
@@ -119,6 +145,11 @@ export default function Index() {
 
   const handleImportCSV = (newStudents: Student[], trainingName: string) => {
     setStudents(prev => [...prev, ...newStudents]);
+    addActivity(
+      'csv_imported',
+      `${newStudents.length} alunos importados`,
+      `Treinamento: ${trainingName}`
+    );
     toast({
       title: "Importação concluída",
       description: `${newStudents.length} alunos importados para ${trainingName}`,
