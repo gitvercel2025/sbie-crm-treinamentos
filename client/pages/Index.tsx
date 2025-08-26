@@ -4,6 +4,7 @@ import StatsCard from "@/components/dashboard/StatsCard";
 import TrainingChart from "@/components/dashboard/TrainingChart";
 import StudentsTable, { Student } from "@/components/dashboard/StudentsTable";
 import CSVImportModal from "@/components/dashboard/CSVImportModal";
+import EditStudentModal from "@/components/dashboard/EditStudentModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
