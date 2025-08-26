@@ -2,16 +2,16 @@ import { useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  BarChart, 
-  PieChart, 
-  Download, 
+import {
+  BarChart,
+  PieChart,
+  Download,
   Calendar,
   TrendingUp,
   Users,
   BookOpen,
   FileText,
-  Filter
+  Filter,
 } from "lucide-react";
 import {
   Select,
@@ -31,29 +31,29 @@ export default function Reports() {
       description: "Lista completa de todos os alunos por treinamento",
       icon: Users,
       color: "bg-sbie-green-dark",
-      action: "Gerar Relatório"
+      action: "Gerar Relatório",
     },
     {
       title: "Relatório de Treinamentos",
       description: "Estatísticas detalhadas de cada treinamento",
       icon: BookOpen,
       color: "bg-sbie-brown",
-      action: "Gerar Relatório"
+      action: "Gerar Relatório",
     },
     {
       title: "Relatório de Performance",
       description: "Análise de performance e conclusão dos cursos",
       icon: TrendingUp,
       color: "bg-sbie-green-olive",
-      action: "Gerar Relatório"
+      action: "Gerar Relatório",
     },
     {
       title: "Relatório Financeiro",
       description: "Receitas e investimentos por treinamento",
       icon: BarChart,
       color: "bg-sbie-green-gray",
-      action: "Gerar Relatório"
-    }
+      action: "Gerar Relatório",
+    },
   ];
 
   const quickStats = [
@@ -61,26 +61,26 @@ export default function Reports() {
       label: "Total de Relatórios Gerados",
       value: "47",
       change: "+12%",
-      period: "este mês"
+      period: "este mês",
     },
     {
       label: "Última Atualização",
       value: "Hoje",
       change: "16:30",
-      period: "horário"
+      period: "horário",
     },
     {
       label: "Relatórios Agendados",
       value: "3",
       change: "pendentes",
-      period: "esta semana"
+      period: "esta semana",
     },
     {
       label: "Exportações",
       value: "128",
       change: "+8%",
-      period: "este mês"
-    }
+      period: "este mês",
+    },
   ];
 
   const recentReports = [
@@ -89,29 +89,29 @@ export default function Reports() {
       type: "PDF",
       date: "Hoje, 14:30",
       size: "2.3 MB",
-      status: "Concluído"
+      status: "Concluído",
     },
     {
       name: "Análise de Performance Q4",
       type: "Excel",
-      date: "Ontem, 16:45", 
+      date: "Ontem, 16:45",
       size: "1.8 MB",
-      status: "Concluído"
+      status: "Concluído",
     },
     {
       name: "Relatório de Certificações",
       type: "PDF",
       date: "2 dias atrás",
       size: "945 KB",
-      status: "Concluído"
+      status: "Concluído",
     },
     {
       name: "Dashboard Executivo",
       type: "PDF",
       date: "3 dias atrás",
       size: "3.2 MB",
-      status: "Concluído"
-    }
+      status: "Concluído",
+    },
   ];
 
   return (
@@ -140,7 +140,7 @@ export default function Reports() {
                 <SelectItem value="year">Este Ano</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Button className="bg-sbie-brown hover:bg-sbie-brown/80">
               <Filter className="mr-2 h-4 w-4" />
               Filtros Avançados
@@ -154,8 +154,12 @@ export default function Reports() {
             <Card key={index} className="border-0 shadow-lg">
               <CardContent className="p-6">
                 <div className="text-center">
-                  <p className="text-sm font-medium text-sbie-green-gray">{stat.label}</p>
-                  <p className="text-2xl font-bold text-sbie-green-dark mt-2">{stat.value}</p>
+                  <p className="text-sm font-medium text-sbie-green-gray">
+                    {stat.label}
+                  </p>
+                  <p className="text-2xl font-bold text-sbie-green-dark mt-2">
+                    {stat.value}
+                  </p>
                   <p className="text-xs text-sbie-green-olive mt-1">
                     {stat.change} {stat.period}
                   </p>
@@ -174,12 +178,18 @@ export default function Reports() {
             {reportCards.map((report, index) => {
               const Icon = report.icon;
               return (
-                <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-200">
+                <Card
+                  key={index}
+                  className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-200"
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center">
                         <div className={`p-3 rounded-lg ${report.color}/10`}>
-                          <Icon className={`h-6 w-6 text-white`} style={{ color: report.color.replace('bg-', '#') }} />
+                          <Icon
+                            className={`h-6 w-6 text-white`}
+                            style={{ color: report.color.replace("bg-", "#") }}
+                          />
                         </div>
                         <div className="ml-4">
                           <CardTitle className="text-lg font-bold text-sbie-green-dark">
@@ -189,20 +199,24 @@ export default function Reports() {
                       </div>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent>
                     <p className="text-sm text-sbie-green-gray mb-4">
                       {report.description}
                     </p>
-                    
+
                     <div className="flex gap-2">
-                      <Button 
+                      <Button
                         className={`flex-1 ${report.color} hover:${report.color}/80 text-white`}
                       >
                         <FileText className="mr-2 h-4 w-4" />
                         {report.action}
                       </Button>
-                      <Button variant="outline" size="sm" className="border-sbie-green-olive/30">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-sbie-green-olive/30"
+                      >
                         <Download className="h-4 w-4" />
                       </Button>
                     </div>
@@ -220,33 +234,46 @@ export default function Reports() {
               <CardTitle className="text-xl font-bold text-sbie-green-dark">
                 Relatórios Recentes
               </CardTitle>
-              <Button variant="outline" size="sm" className="border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white"
+              >
                 Ver Todos
               </Button>
             </div>
           </CardHeader>
-          
+
           <CardContent>
             <div className="space-y-4">
               {recentReports.map((report, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-sbie-beige-light/20 rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-4 bg-sbie-beige-light/20 rounded-lg"
+                >
                   <div className="flex items-center">
                     <div className="p-2 rounded-lg bg-sbie-green-dark/10">
                       <FileText className="h-5 w-5 text-sbie-green-dark" />
                     </div>
                     <div className="ml-4">
-                      <p className="font-medium text-sbie-green-dark">{report.name}</p>
+                      <p className="font-medium text-sbie-green-dark">
+                        {report.name}
+                      </p>
                       <p className="text-sm text-sbie-green-gray">
                         {report.type} • {report.size} • {report.date}
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
                       {report.status}
                     </span>
-                    <Button variant="ghost" size="sm" className="text-sbie-brown hover:bg-sbie-brown/10">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-sbie-brown hover:bg-sbie-brown/10"
+                    >
                       <Download className="h-4 w-4" />
                     </Button>
                   </div>

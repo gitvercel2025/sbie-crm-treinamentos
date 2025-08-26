@@ -40,26 +40,26 @@ interface EditTrainingModalProps {
 
 const INSTRUCTOR_OPTIONS = [
   "Ana Silva",
-  "Carlos Santos", 
+  "Carlos Santos",
   "Maria Oliveira",
   "João Costa",
   "Patricia Lima",
-  "Roberto Ferreira"
+  "Roberto Ferreira",
 ];
 
 const DURATION_OPTIONS = [
   "4 semanas",
-  "6 semanas", 
+  "6 semanas",
   "8 semanas",
   "12 semanas",
-  "16 semanas"
+  "16 semanas",
 ];
 
-export default function EditTrainingModal({ 
-  training, 
-  open, 
-  onOpenChange, 
-  onSave 
+export default function EditTrainingModal({
+  training,
+  open,
+  onOpenChange,
+  onSave,
 }: EditTrainingModalProps) {
   const [formData, setFormData] = useState<Training>({
     id: "",
@@ -158,22 +158,29 @@ export default function EditTrainingModal({
             {training ? "Editar Treinamento" : "Novo Treinamento"}
           </DialogTitle>
           <DialogDescription className="text-sbie-green-gray">
-            {training ? "Edite as informações do treinamento" : "Adicione um novo treinamento ao sistema"}
+            {training
+              ? "Edite as informações do treinamento"
+              : "Adicione um novo treinamento ao sistema"}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Nome */}
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-medium text-sbie-green-dark">
+            <Label
+              htmlFor="name"
+              className="text-sm font-medium text-sbie-green-dark"
+            >
               Nome do Treinamento *
             </Label>
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, name: e.target.value }))
+              }
               placeholder="Digite o nome do treinamento"
-              className={`border-sbie-green-olive/30 ${errors.name ? 'border-red-500' : ''}`}
+              className={`border-sbie-green-olive/30 ${errors.name ? "border-red-500" : ""}`}
             />
             {errors.name && (
               <p className="text-xs text-red-600">{errors.name}</p>
@@ -182,15 +189,23 @@ export default function EditTrainingModal({
 
           {/* Descrição */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-medium text-sbie-green-dark">
+            <Label
+              htmlFor="description"
+              className="text-sm font-medium text-sbie-green-dark"
+            >
               Descrição *
             </Label>
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
               placeholder="Descreva o treinamento..."
-              className={`border-sbie-green-olive/30 min-h-[80px] ${errors.description ? 'border-red-500' : ''}`}
+              className={`border-sbie-green-olive/30 min-h-[80px] ${errors.description ? "border-red-500" : ""}`}
             />
             {errors.description && (
               <p className="text-xs text-red-600">{errors.description}</p>
@@ -203,9 +218,11 @@ export default function EditTrainingModal({
               <Label className="text-sm font-medium text-sbie-green-dark">
                 Status *
               </Label>
-              <Select 
-                value={formData.status} 
-                onValueChange={(value: "active" | "inactive" | "planned") => setFormData(prev => ({ ...prev, status: value }))}
+              <Select
+                value={formData.status}
+                onValueChange={(value: "active" | "inactive" | "planned") =>
+                  setFormData((prev) => ({ ...prev, status: value }))
+                }
               >
                 <SelectTrigger className="border-sbie-green-olive/30">
                   <SelectValue placeholder="Selecione o status" />
@@ -220,7 +237,10 @@ export default function EditTrainingModal({
 
             {/* Número de Alunos */}
             <div className="space-y-2">
-              <Label htmlFor="students" className="text-sm font-medium text-sbie-green-dark">
+              <Label
+                htmlFor="students"
+                className="text-sm font-medium text-sbie-green-dark"
+              >
                 Número de Alunos
               </Label>
               <Input
@@ -228,9 +248,14 @@ export default function EditTrainingModal({
                 type="number"
                 min="0"
                 value={formData.students}
-                onChange={(e) => setFormData(prev => ({ ...prev, students: parseInt(e.target.value) || 0 }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    students: parseInt(e.target.value) || 0,
+                  }))
+                }
                 placeholder="0"
-                className={`border-sbie-green-olive/30 ${errors.students ? 'border-red-500' : ''}`}
+                className={`border-sbie-green-olive/30 ${errors.students ? "border-red-500" : ""}`}
               />
               {errors.students && (
                 <p className="text-xs text-red-600">{errors.students}</p>
@@ -241,15 +266,23 @@ export default function EditTrainingModal({
           <div className="grid grid-cols-2 gap-4">
             {/* Data de Início */}
             <div className="space-y-2">
-              <Label htmlFor="startDate" className="text-sm font-medium text-sbie-green-dark">
+              <Label
+                htmlFor="startDate"
+                className="text-sm font-medium text-sbie-green-dark"
+              >
                 Data de Início *
               </Label>
               <Input
                 id="startDate"
                 type="date"
                 value={formData.startDate}
-                onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                className={`border-sbie-green-olive/30 ${errors.startDate ? 'border-red-500' : ''}`}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    startDate: e.target.value,
+                  }))
+                }
+                className={`border-sbie-green-olive/30 ${errors.startDate ? "border-red-500" : ""}`}
               />
               {errors.startDate && (
                 <p className="text-xs text-red-600">{errors.startDate}</p>
@@ -261,11 +294,15 @@ export default function EditTrainingModal({
               <Label className="text-sm font-medium text-sbie-green-dark">
                 Duração *
               </Label>
-              <Select 
-                value={formData.duration} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, duration: value }))}
+              <Select
+                value={formData.duration}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, duration: value }))
+                }
               >
-                <SelectTrigger className={`border-sbie-green-olive/30 ${errors.duration ? 'border-red-500' : ''}`}>
+                <SelectTrigger
+                  className={`border-sbie-green-olive/30 ${errors.duration ? "border-red-500" : ""}`}
+                >
                   <SelectValue placeholder="Selecione a duração" />
                 </SelectTrigger>
                 <SelectContent>
@@ -287,11 +324,15 @@ export default function EditTrainingModal({
             <Label className="text-sm font-medium text-sbie-green-dark">
               Instrutor *
             </Label>
-            <Select 
-              value={formData.instructor} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, instructor: value }))}
+            <Select
+              value={formData.instructor}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, instructor: value }))
+              }
             >
-              <SelectTrigger className={`border-sbie-green-olive/30 ${errors.instructor ? 'border-red-500' : ''}`}>
+              <SelectTrigger
+                className={`border-sbie-green-olive/30 ${errors.instructor ? "border-red-500" : ""}`}
+              >
                 <SelectValue placeholder="Selecione o instrutor" />
               </SelectTrigger>
               <SelectContent>
@@ -313,7 +354,7 @@ export default function EditTrainingModal({
             <X className="mr-2 h-4 w-4" />
             Cancelar
           </Button>
-          <Button 
+          <Button
             onClick={handleSave}
             className="bg-sbie-brown hover:bg-sbie-brown/80"
           >

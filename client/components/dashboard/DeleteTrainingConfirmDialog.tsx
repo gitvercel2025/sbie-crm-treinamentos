@@ -34,15 +34,15 @@ export default function DeleteTrainingConfirmDialog({
             Tem certeza que deseja excluir o treinamento{" "}
             <span className="font-semibold text-sbie-brown">
               {training?.name}
-            </span>?
+            </span>
+            ?
             {training?.students > 0 && (
               <span className="block mt-2 text-red-600 font-medium">
-                Atenção: Este treinamento possui {training.students} aluno(s) matriculado(s).
+                Atenção: Este treinamento possui {training.students} aluno(s)
+                matriculado(s).
               </span>
             )}
-            <span className="block mt-2">
-              Esta ação não pode ser desfeita.
-            </span>
+            <span className="block mt-2">Esta ação não pode ser desfeita.</span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { 
+import {
   Settings as SettingsIcon,
   User,
   Bell,
@@ -24,7 +24,7 @@ import {
   Mail,
   Save,
   Upload,
-  Download
+  Download,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -35,24 +35,24 @@ export default function Settings() {
     organizationEmail: "contato@sbie.com.br",
     organizationPhone: "+55 11 99999-9999",
     organizationAddress: "São Paulo, SP - Brasil",
-    
+
     // Notification Settings
     emailNotifications: true,
     smsNotifications: false,
     reportNotifications: true,
     studentNotifications: true,
-    
+
     // System Settings
     language: "pt-BR",
     timezone: "America/Sao_Paulo",
     dateFormat: "DD/MM/YYYY",
     currency: "BRL",
-    
+
     // Security Settings
     twoFactorAuth: false,
     sessionTimeout: "30",
     passwordExpiry: "90",
-    
+
     // Appearance Settings
     theme: "light",
     compactMode: false,
@@ -69,13 +69,13 @@ export default function Settings() {
 
   const handleExportSettings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'sbie-settings.json';
+    link.download = "sbie-settings.json";
     link.click();
-    
+
     toast({
       title: "Configurações exportadas",
       description: "Arquivo de configurações baixado com sucesso",
@@ -96,15 +96,15 @@ export default function Settings() {
             </p>
           </div>
           <div className="mt-4 sm:mt-0 flex gap-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={handleExportSettings}
               className="border-sbie-green-olive text-sbie-green-olive hover:bg-sbie-green-olive hover:text-white"
             >
               <Download className="mr-2 h-4 w-4" />
               Exportar
             </Button>
-            <Button 
+            <Button
               onClick={handleSave}
               className="bg-sbie-brown hover:bg-sbie-brown/80"
             >
@@ -136,7 +136,12 @@ export default function Settings() {
                     <Input
                       id="orgName"
                       value={settings.organizationName}
-                      onChange={(e) => setSettings(prev => ({ ...prev, organizationName: e.target.value }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          organizationName: e.target.value,
+                        }))
+                      }
                       className="border-sbie-green-olive/30"
                     />
                   </div>
@@ -146,19 +151,29 @@ export default function Settings() {
                       id="orgEmail"
                       type="email"
                       value={settings.organizationEmail}
-                      onChange={(e) => setSettings(prev => ({ ...prev, organizationEmail: e.target.value }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          organizationEmail: e.target.value,
+                        }))
+                      }
                       className="border-sbie-green-olive/30"
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="orgPhone">Telefone</Label>
                     <Input
                       id="orgPhone"
                       value={settings.organizationPhone}
-                      onChange={(e) => setSettings(prev => ({ ...prev, organizationPhone: e.target.value }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          organizationPhone: e.target.value,
+                        }))
+                      }
                       className="border-sbie-green-olive/30"
                     />
                   </div>
@@ -167,7 +182,12 @@ export default function Settings() {
                     <Input
                       id="orgAddress"
                       value={settings.organizationAddress}
-                      onChange={(e) => setSettings(prev => ({ ...prev, organizationAddress: e.target.value }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          organizationAddress: e.target.value,
+                        }))
+                      }
                       className="border-sbie-green-olive/30"
                     />
                   </div>
@@ -191,37 +211,60 @@ export default function Settings() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="language">Idioma</Label>
-                    <Select value={settings.language} onValueChange={(value) => setSettings(prev => ({ ...prev, language: value }))}>
+                    <Select
+                      value={settings.language}
+                      onValueChange={(value) =>
+                        setSettings((prev) => ({ ...prev, language: value }))
+                      }
+                    >
                       <SelectTrigger className="border-sbie-green-olive/30">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="pt-BR">Português (Brasil)</SelectItem>
+                        <SelectItem value="pt-BR">
+                          Português (Brasil)
+                        </SelectItem>
                         <SelectItem value="en-US">English (US)</SelectItem>
                         <SelectItem value="es-ES">Español (España)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="timezone">Fuso Horário</Label>
-                    <Select value={settings.timezone} onValueChange={(value) => setSettings(prev => ({ ...prev, timezone: value }))}>
+                    <Select
+                      value={settings.timezone}
+                      onValueChange={(value) =>
+                        setSettings((prev) => ({ ...prev, timezone: value }))
+                      }
+                    >
                       <SelectTrigger className="border-sbie-green-olive/30">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="America/Sao_Paulo">São Paulo (GMT-3)</SelectItem>
-                        <SelectItem value="America/New_York">New York (GMT-5)</SelectItem>
-                        <SelectItem value="Europe/London">London (GMT+0)</SelectItem>
+                        <SelectItem value="America/Sao_Paulo">
+                          São Paulo (GMT-3)
+                        </SelectItem>
+                        <SelectItem value="America/New_York">
+                          New York (GMT-5)
+                        </SelectItem>
+                        <SelectItem value="Europe/London">
+                          London (GMT+0)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="dateFormat">Formato de Data</Label>
-                    <Select value={settings.dateFormat} onValueChange={(value) => setSettings(prev => ({ ...prev, dateFormat: value }))}>
+                    <Select
+                      value={settings.dateFormat}
+                      onValueChange={(value) =>
+                        setSettings((prev) => ({ ...prev, dateFormat: value }))
+                      }
+                    >
                       <SelectTrigger className="border-sbie-green-olive/30">
                         <SelectValue />
                       </SelectTrigger>
@@ -232,10 +275,15 @@ export default function Settings() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="currency">Moeda</Label>
-                    <Select value={settings.currency} onValueChange={(value) => setSettings(prev => ({ ...prev, currency: value }))}>
+                    <Select
+                      value={settings.currency}
+                      onValueChange={(value) =>
+                        setSettings((prev) => ({ ...prev, currency: value }))
+                      }
+                    >
                       <SelectTrigger className="border-sbie-green-olive/30">
                         <SelectValue />
                       </SelectTrigger>
@@ -265,7 +313,9 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="twoFactor">Autenticação de Dois Fatores</Label>
+                    <Label htmlFor="twoFactor">
+                      Autenticação de Dois Fatores
+                    </Label>
                     <p className="text-sm text-sbie-green-gray">
                       Adicione uma camada extra de segurança
                     </p>
@@ -273,29 +323,48 @@ export default function Settings() {
                   <Switch
                     id="twoFactor"
                     checked={settings.twoFactorAuth}
-                    onCheckedChange={(checked) => setSettings(prev => ({ ...prev, twoFactorAuth: checked }))}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        twoFactorAuth: checked,
+                      }))
+                    }
                   />
                 </div>
-                
+
                 <Separator />
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="sessionTimeout">Timeout de Sessão (minutos)</Label>
+                    <Label htmlFor="sessionTimeout">
+                      Timeout de Sessão (minutos)
+                    </Label>
                     <Input
                       id="sessionTimeout"
                       value={settings.sessionTimeout}
-                      onChange={(e) => setSettings(prev => ({ ...prev, sessionTimeout: e.target.value }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          sessionTimeout: e.target.value,
+                        }))
+                      }
                       className="border-sbie-green-olive/30"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="passwordExpiry">Expiração de Senha (dias)</Label>
+                    <Label htmlFor="passwordExpiry">
+                      Expiração de Senha (dias)
+                    </Label>
                     <Input
                       id="passwordExpiry"
                       value={settings.passwordExpiry}
-                      onChange={(e) => setSettings(prev => ({ ...prev, passwordExpiry: e.target.value }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          passwordExpiry: e.target.value,
+                        }))
+                      }
                       className="border-sbie-green-olive/30"
                     />
                   </div>
@@ -322,39 +391,60 @@ export default function Settings() {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="emailNotif">Email</Label>
-                    <p className="text-xs text-sbie-green-gray">Receber por email</p>
+                    <p className="text-xs text-sbie-green-gray">
+                      Receber por email
+                    </p>
                   </div>
                   <Switch
                     id="emailNotif"
                     checked={settings.emailNotifications}
-                    onCheckedChange={(checked) => setSettings(prev => ({ ...prev, emailNotifications: checked }))}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        emailNotifications: checked,
+                      }))
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="smsNotif">SMS</Label>
-                    <p className="text-xs text-sbie-green-gray">Receber por SMS</p>
+                    <p className="text-xs text-sbie-green-gray">
+                      Receber por SMS
+                    </p>
                   </div>
                   <Switch
                     id="smsNotif"
                     checked={settings.smsNotifications}
-                    onCheckedChange={(checked) => setSettings(prev => ({ ...prev, smsNotifications: checked }))}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        smsNotifications: checked,
+                      }))
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="reportNotif">Relatórios</Label>
-                    <p className="text-xs text-sbie-green-gray">Novos relatórios</p>
+                    <p className="text-xs text-sbie-green-gray">
+                      Novos relatórios
+                    </p>
                   </div>
                   <Switch
                     id="reportNotif"
                     checked={settings.reportNotifications}
-                    onCheckedChange={(checked) => setSettings(prev => ({ ...prev, reportNotifications: checked }))}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        reportNotifications: checked,
+                      }))
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="studentNotif">Alunos</Label>
@@ -363,7 +453,12 @@ export default function Settings() {
                   <Switch
                     id="studentNotif"
                     checked={settings.studentNotifications}
-                    onCheckedChange={(checked) => setSettings(prev => ({ ...prev, studentNotifications: checked }))}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        studentNotifications: checked,
+                      }))
+                    }
                   />
                 </div>
               </CardContent>
@@ -384,7 +479,12 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="theme">Tema</Label>
-                  <Select value={settings.theme} onValueChange={(value) => setSettings(prev => ({ ...prev, theme: value }))}>
+                  <Select
+                    value={settings.theme}
+                    onValueChange={(value) =>
+                      setSettings((prev) => ({ ...prev, theme: value }))
+                    }
+                  >
                     <SelectTrigger className="border-sbie-green-olive/30">
                       <SelectValue />
                     </SelectTrigger>
@@ -395,28 +495,39 @@ export default function Settings() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="compact">Modo Compacto</Label>
-                    <p className="text-xs text-sbie-green-gray">Interface reduzida</p>
+                    <p className="text-xs text-sbie-green-gray">
+                      Interface reduzida
+                    </p>
                   </div>
                   <Switch
                     id="compact"
                     checked={settings.compactMode}
-                    onCheckedChange={(checked) => setSettings(prev => ({ ...prev, compactMode: checked }))}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({ ...prev, compactMode: checked }))
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="sidebar">Sidebar Colapsada</Label>
-                    <p className="text-xs text-sbie-green-gray">Iniciar colapsada</p>
+                    <p className="text-xs text-sbie-green-gray">
+                      Iniciar colapsada
+                    </p>
                   </div>
                   <Switch
                     id="sidebar"
                     checked={settings.sidebarCollapsed}
-                    onCheckedChange={(checked) => setSettings(prev => ({ ...prev, sidebarCollapsed: checked }))}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        sidebarCollapsed: checked,
+                      }))
+                    }
                   />
                 </div>
               </CardContent>
@@ -435,17 +546,26 @@ export default function Settings() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button variant="outline" className="w-full border-sbie-green-olive text-sbie-green-olive hover:bg-sbie-green-olive hover:text-white">
+                <Button
+                  variant="outline"
+                  className="w-full border-sbie-green-olive text-sbie-green-olive hover:bg-sbie-green-olive hover:text-white"
+                >
                   <Upload className="mr-2 h-4 w-4" />
                   Backup dos Dados
                 </Button>
-                
-                <Button variant="outline" className="w-full border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white">
+
+                <Button
+                  variant="outline"
+                  className="w-full border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white"
+                >
                   <Download className="mr-2 h-4 w-4" />
                   Exportar Dados
                 </Button>
-                
-                <Button variant="outline" className="w-full border-red-500 text-red-600 hover:bg-red-50">
+
+                <Button
+                  variant="outline"
+                  className="w-full border-red-500 text-red-600 hover:bg-red-50"
+                >
                   <Database className="mr-2 h-4 w-4" />
                   Limpar Cache
                 </Button>

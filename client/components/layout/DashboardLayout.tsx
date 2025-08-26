@@ -3,7 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Menu,
   Search,
@@ -63,7 +67,7 @@ const trainingItems = [
 export default function DashboardLayout({
   children,
   selectedTraining = "all",
-  onTrainingSelect
+  onTrainingSelect,
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -77,7 +81,7 @@ export default function DashboardLayout({
       <div
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-200 ease-in-out lg:translate-x-0",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         <div className="flex h-full flex-col bg-sbie-green-dark text-white">
@@ -85,7 +89,9 @@ export default function DashboardLayout({
           <div className="flex h-16 items-center justify-between px-6 bg-sbie-green-dark/90">
             <div className="flex items-center gap-3">
               <GraduationCap className="h-8 w-8 text-sbie-beige-light" />
-              <span className="text-xl font-bold text-sbie-beige-light">SBIE CRM</span>
+              <span className="text-xl font-bold text-sbie-beige-light">
+                SBIE CRM
+              </span>
             </div>
             <Button
               variant="ghost"
@@ -125,7 +131,7 @@ export default function DashboardLayout({
                       "w-full justify-start text-left font-medium",
                       isActive
                         ? "bg-sbie-brown text-white hover:bg-sbie-brown/80"
-                        : "text-sbie-beige-light hover:bg-sbie-green-olive hover:text-white"
+                        : "text-sbie-beige-light hover:bg-sbie-green-olive hover:text-white",
                     )}
                   >
                     <Icon className="mr-3 h-5 w-5" />
@@ -162,7 +168,9 @@ export default function DashboardLayout({
                       }`}
                     >
                       <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
-                      <span className="truncate font-medium">Todos os Treinamentos</span>
+                      <span className="truncate font-medium">
+                        Todos os Treinamentos
+                      </span>
                     </Button>
                     {trainingItems.map((training) => (
                       <Button
@@ -210,11 +218,18 @@ export default function DashboardLayout({
               />
             </div>
             <div className="flex items-center gap-4">
-              <Button size="sm" className="bg-sbie-brown hover:bg-sbie-brown/80">
+              <Button
+                size="sm"
+                className="bg-sbie-brown hover:bg-sbie-brown/80"
+              >
                 <Download className="mr-2 h-4 w-4" />
                 Exportar
               </Button>
-              <Button size="sm" variant="outline" className="border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white">
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white"
+              >
                 <Upload className="mr-2 h-4 w-4" />
                 Importar
               </Button>

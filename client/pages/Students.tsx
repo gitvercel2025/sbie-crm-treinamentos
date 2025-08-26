@@ -22,8 +22,8 @@ export default function Students() {
   };
 
   const handleSaveStudent = (updatedStudent: Student) => {
-    setStudents(prev => 
-      prev.map(s => s.id === updatedStudent.id ? updatedStudent : s)
+    setStudents((prev) =>
+      prev.map((s) => (s.id === updatedStudent.id ? updatedStudent : s)),
     );
     toast({
       title: "Aluno atualizado",
@@ -41,7 +41,7 @@ export default function Students() {
       ...newStudent,
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     };
-    setStudents(prev => [...prev, studentWithId]);
+    setStudents((prev) => [...prev, studentWithId]);
     toast({
       title: "Aluno adicionado",
       description: `${newStudent.nome} foi adicionado com sucesso`,
@@ -49,7 +49,7 @@ export default function Students() {
   };
 
   const handleDeleteStudent = (id: string) => {
-    const student = students.find(s => s.id === id);
+    const student = students.find((s) => s.id === id);
     if (student) {
       setStudentToDelete(student);
       setDeleteDialogOpen(true);
@@ -58,7 +58,7 @@ export default function Students() {
 
   const confirmDeleteStudent = () => {
     if (studentToDelete) {
-      setStudents(prev => prev.filter(s => s.id !== studentToDelete.id));
+      setStudents((prev) => prev.filter((s) => s.id !== studentToDelete.id));
       toast({
         title: "Aluno excluído",
         description: `${studentToDelete.nome} foi removido do sistema`,
@@ -73,7 +73,7 @@ export default function Students() {
   };
 
   const handleImportCSV = (newStudents: Student[], trainingName: string) => {
-    setStudents(prev => [...prev, ...newStudents]);
+    setStudents((prev) => [...prev, ...newStudents]);
     toast({
       title: "Importação concluída",
       description: `${newStudents.length} alunos importados para ${trainingName}`,
@@ -83,24 +83,29 @@ export default function Students() {
   const handleExportCSV = () => {
     const csvContent = [
       ["Nome", "Celular", "Email", "Treinamento"].join(","),
-      ...students.map(student => [
-        `"${student.nome}"`,
-        `"${student.celular}"`,
-        `"${student.email}"`,
-        `"${student.treinamento}"`
-      ].join(","))
+      ...students.map((student) =>
+        [
+          `"${student.nome}"`,
+          `"${student.celular}"`,
+          `"${student.email}"`,
+          `"${student.treinamento}"`,
+        ].join(","),
+      ),
     ].join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `sbie-alunos-${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute(
+      "download",
+      `sbie-alunos-${new Date().toISOString().split("T")[0]}.csv`,
+    );
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     toast({
       title: "Exportação concluída",
       description: `${students.length} alunos exportados para CSV`,
@@ -121,23 +126,23 @@ export default function Students() {
             </p>
           </div>
           <div className="mt-4 sm:mt-0 flex flex-wrap gap-3">
-            <Button 
+            <Button
               onClick={handleAddStudent}
               className="bg-sbie-green-dark hover:bg-sbie-green-dark/80"
             >
               <Plus className="mr-2 h-4 w-4" />
               Novo Aluno
             </Button>
-            <Button 
+            <Button
               onClick={() => setImportModalOpen(true)}
               className="bg-sbie-brown hover:bg-sbie-brown/80"
             >
               <Upload className="mr-2 h-4 w-4" />
               Importar CSV
             </Button>
-            <Button 
+            <Button
               onClick={handleExportCSV}
-              variant="outline" 
+              variant="outline"
               className="border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white"
               disabled={students.length === 0}
             >
@@ -155,35 +160,51 @@ export default function Students() {
                 <Users className="h-6 w-6 text-sbie-green-dark" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-sbie-green-gray">Total de Alunos</p>
-                <p className="text-2xl font-bold text-sbie-green-dark">{students.length}</p>
+                <p className="text-sm font-medium text-sbie-green-gray">
+                  Total de Alunos
+                </p>
+                <p className="text-2xl font-bold text-sbie-green-dark">
+                  {students.length}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-6 rounded-lg shadow-lg border border-sbie-green-olive/20">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-sbie-brown/10">
                 <Users className="h-6 w-6 text-sbie-brown" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-sbie-green-gray">Treinamentos</p>
+                <p className="text-sm font-medium text-sbie-green-gray">
+                  Treinamentos
+                </p>
                 <p className="text-2xl font-bold text-sbie-green-dark">
-                  {new Set(students.map(s => s.treinamento)).size}
+                  {new Set(students.map((s) => s.treinamento)).size}
                 </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-6 rounded-lg shadow-lg border border-sbie-green-olive/20">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-sbie-green-olive/10">
                 <Users className="h-6 w-6 text-sbie-green-olive" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-sbie-green-gray">Média/Treinamento</p>
+                <p className="text-sm font-medium text-sbie-green-gray">
+                  Média/Treinamento
+                </p>
                 <p className="text-2xl font-bold text-sbie-green-dark">
-                  {students.length > 0 ? Math.round(students.length / Math.max(1, new Set(students.map(s => s.treinamento)).size)) : 0}
+                  {students.length > 0
+                    ? Math.round(
+                        students.length /
+                          Math.max(
+                            1,
+                            new Set(students.map((s) => s.treinamento)).size,
+                          ),
+                      )
+                    : 0}
                 </p>
               </div>
             </div>
@@ -197,21 +218,21 @@ export default function Students() {
           onDelete={handleDeleteStudent}
           onWhatsApp={handleWhatsAppStudent}
         />
-        
+
         {/* Modals */}
         <CSVImportModal
           open={importModalOpen}
           onOpenChange={setImportModalOpen}
           onImport={handleImportCSV}
         />
-        
+
         <EditStudentModal
           student={selectedStudent}
           open={editModalOpen}
           onOpenChange={setEditModalOpen}
           onSave={selectedStudent ? handleSaveStudent : handleCreateStudent}
         />
-        
+
         <DeleteConfirmDialog
           student={studentToDelete}
           open={deleteDialogOpen}

@@ -9,14 +9,21 @@ import DeleteConfirmDialog from "@/components/dashboard/DeleteConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Users, BookOpen, TrendingUp, Award, Upload, Download } from "lucide-react";
+import {
+  Users,
+  BookOpen,
+  TrendingUp,
+  Award,
+  Upload,
+  Download,
+} from "lucide-react";
 
 // Start with empty student list - real data will be imported from CSV files
 const initialStudents: Student[] = [];
 
 interface Activity {
   id: string;
-  type: 'student_added' | 'student_deleted' | 'csv_imported' | 'student_edited';
+  type: "student_added" | "student_deleted" | "csv_imported" | "student_edited";
   message: string;
   timestamp: Date;
   details?: string;
@@ -32,7 +39,11 @@ export default function Index() {
   const [selectedTraining, setSelectedTraining] = useState<string>("all");
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  const addActivity = (type: Activity['type'], message: string, details?: string) => {
+  const addActivity = (
+    type: Activity["type"],
+    message: string,
+    details?: string,
+  ) => {
     const newActivity: Activity = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type,
@@ -40,34 +51,39 @@ export default function Index() {
       timestamp: new Date(),
       details,
     };
-    setActivities(prev => [newActivity, ...prev.slice(0, 9)]); // Keep only last 10 activities
+    setActivities((prev) => [newActivity, ...prev.slice(0, 9)]); // Keep only last 10 activities
   };
 
   // Filter students by selected training
-  const filteredStudents = selectedTraining === "all"
-    ? students
-    : students.filter(s => s.treinamento === selectedTraining);
+  const filteredStudents =
+    selectedTraining === "all"
+      ? students
+      : students.filter((s) => s.treinamento === selectedTraining);
 
   // Calculate stats
   const totalStudents = students.length;
   const filteredCount = filteredStudents.length;
-  const uniqueTrainings = new Set(students.map(s => s.treinamento)).size;
-  
+  const uniqueTrainings = new Set(students.map((s) => s.treinamento)).size;
+
   // Chart data - always show all trainings data for overview
-  const trainingData = students.reduce((acc, student) => {
-    const training = acc.find(t => t.name === student.treinamento);
-    if (training) {
-      training.students += 1;
-    } else {
-      acc.push({
-        name: student.treinamento.length > 25 ?
-          student.treinamento.substring(0, 25) + "..." :
-          student.treinamento,
-        students: 1
-      });
-    }
-    return acc;
-  }, [] as { name: string; students: number }[]);
+  const trainingData = students.reduce(
+    (acc, student) => {
+      const training = acc.find((t) => t.name === student.treinamento);
+      if (training) {
+        training.students += 1;
+      } else {
+        acc.push({
+          name:
+            student.treinamento.length > 25
+              ? student.treinamento.substring(0, 25) + "..."
+              : student.treinamento,
+          students: 1,
+        });
+      }
+      return acc;
+    },
+    [] as { name: string; students: number }[],
+  );
 
   // Sort by number of students (descending)
   trainingData.sort((a, b) => b.students - a.students);
@@ -78,13 +94,13 @@ export default function Index() {
   };
 
   const handleSaveStudent = (updatedStudent: Student) => {
-    setStudents(prev =>
-      prev.map(s => s.id === updatedStudent.id ? updatedStudent : s)
+    setStudents((prev) =>
+      prev.map((s) => (s.id === updatedStudent.id ? updatedStudent : s)),
     );
     addActivity(
-      'student_edited',
+      "student_edited",
       `Aluno ${updatedStudent.nome} foi editado`,
-      `Treinamento: ${updatedStudent.treinamento}`
+      `Treinamento: ${updatedStudent.treinamento}`,
     );
     toast({
       title: "Aluno atualizado",
@@ -102,11 +118,11 @@ export default function Index() {
       ...newStudent,
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     };
-    setStudents(prev => [...prev, studentWithId]);
+    setStudents((prev) => [...prev, studentWithId]);
     addActivity(
-      'student_added',
+      "student_added",
       `Novo aluno ${newStudent.nome} adicionado`,
-      `Treinamento: ${newStudent.treinamento}`
+      `Treinamento: ${newStudent.treinamento}`,
     );
     toast({
       title: "Aluno adicionado",
@@ -115,7 +131,7 @@ export default function Index() {
   };
 
   const handleDeleteStudent = (id: string) => {
-    const student = students.find(s => s.id === id);
+    const student = students.find((s) => s.id === id);
     if (student) {
       setStudentToDelete(student);
       setDeleteDialogOpen(true);
@@ -124,11 +140,11 @@ export default function Index() {
 
   const confirmDeleteStudent = () => {
     if (studentToDelete) {
-      setStudents(prev => prev.filter(s => s.id !== studentToDelete.id));
+      setStudents((prev) => prev.filter((s) => s.id !== studentToDelete.id));
       addActivity(
-        'student_deleted',
+        "student_deleted",
         `Aluno ${studentToDelete.nome} foi removido`,
-        `Treinamento: ${studentToDelete.treinamento}`
+        `Treinamento: ${studentToDelete.treinamento}`,
       );
       toast({
         title: "Aluno excluído",
@@ -144,11 +160,11 @@ export default function Index() {
   };
 
   const handleImportCSV = (newStudents: Student[], trainingName: string) => {
-    setStudents(prev => [...prev, ...newStudents]);
+    setStudents((prev) => [...prev, ...newStudents]);
     addActivity(
-      'csv_imported',
+      "csv_imported",
       `${newStudents.length} alunos importados`,
-      `Treinamento: ${trainingName}`
+      `Treinamento: ${trainingName}`,
     );
     toast({
       title: "Importação concluída",
@@ -159,19 +175,24 @@ export default function Index() {
   const handleExportCSV = () => {
     const csvContent = [
       ["Nome", "Celular", "Email", "Treinamento"].join(","),
-      ...students.map(student => [
-        `"${student.nome}"`,
-        `"${student.celular}"`,
-        `"${student.email}"`,
-        `"${student.treinamento}"`
-      ].join(","))
+      ...students.map((student) =>
+        [
+          `"${student.nome}"`,
+          `"${student.celular}"`,
+          `"${student.email}"`,
+          `"${student.treinamento}"`,
+        ].join(","),
+      ),
     ].join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `sbie-alunos-${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute(
+      "download",
+      `sbie-alunos-${new Date().toISOString().split("T")[0]}.csv`,
+    );
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -198,8 +219,7 @@ export default function Index() {
             <p className="mt-2 text-sbie-green-gray">
               {selectedTraining === "all"
                 ? "Gerencie os alunos da Sociedade Brasileira de Inteligência Emocional"
-                : `Visualizando alunos de: ${selectedTraining}`
-              }
+                : `Visualizando alunos de: ${selectedTraining}`}
             </p>
           </div>
           <div className="mt-4 sm:mt-0 flex flex-wrap gap-3">
@@ -232,11 +252,16 @@ export default function Index() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatsCard
-            title={selectedTraining === "all" ? "Total de Alunos" : "Alunos no Filtro"}
+            title={
+              selectedTraining === "all"
+                ? "Total de Alunos"
+                : "Alunos no Filtro"
+            }
             value={filteredCount.toLocaleString()}
-            change={selectedTraining === "all" ?
-              { value: `${totalStudents} total`, trend: "neutral" } :
-              { value: `${totalStudents} no total`, trend: "neutral" }
+            change={
+              selectedTraining === "all"
+                ? { value: `${totalStudents} total`, trend: "neutral" }
+                : { value: `${totalStudents} no total`, trend: "neutral" }
             }
             icon={Users}
             color="green"
@@ -250,7 +275,11 @@ export default function Index() {
           />
           <StatsCard
             title="Média por Treinamento"
-            value={uniqueTrainings > 0 ? Math.round(totalStudents / uniqueTrainings) : 0}
+            value={
+              uniqueTrainings > 0
+                ? Math.round(totalStudents / uniqueTrainings)
+                : 0
+            }
             change={{ value: "alunos/curso", trend: "neutral" }}
             icon={TrendingUp}
             color="olive"
@@ -258,7 +287,13 @@ export default function Index() {
           <StatsCard
             title="Treinamento Selecionado"
             value={selectedTraining === "all" ? "Todos" : "1"}
-            change={{ value: selectedTraining === "all" ? "visualizando" : selectedTraining.substring(0, 20) + "...", trend: "neutral" }}
+            change={{
+              value:
+                selectedTraining === "all"
+                  ? "visualizando"
+                  : selectedTraining.substring(0, 20) + "...",
+              trend: "neutral",
+            }}
             icon={Award}
             color="beige"
           />
@@ -267,7 +302,7 @@ export default function Index() {
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <TrainingChart data={trainingData} type="bar" />
-          
+
           {/* Recent Activity */}
           <Card className="border-0 shadow-lg">
             <CardHeader>
@@ -285,20 +320,30 @@ export default function Index() {
                     Nenhuma atividade recente
                   </p>
                   <p className="text-xs text-sbie-green-gray mt-1">
-                    As atividades aparecerão aqui quando você começar a usar o sistema
+                    As atividades aparecerão aqui quando você começar a usar o
+                    sistema
                   </p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {activities.slice(0, 5).map((activity) => (
-                    <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/20 hover:bg-sbie-beige-light/30 transition-colors duration-200">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${
-                        activity.type === 'student_added' ? 'bg-green-500' :
-                        activity.type === 'student_deleted' ? 'bg-red-500' :
-                        activity.type === 'csv_imported' ? 'bg-sbie-brown' :
-                        activity.type === 'student_edited' ? 'bg-sbie-green-olive' :
-                        'bg-sbie-green-gray'
-                      }`}></div>
+                    <div
+                      key={activity.id}
+                      className="flex items-start gap-3 p-3 rounded-lg bg-sbie-beige-light/20 hover:bg-sbie-beige-light/30 transition-colors duration-200"
+                    >
+                      <div
+                        className={`w-2 h-2 rounded-full mt-2 ${
+                          activity.type === "student_added"
+                            ? "bg-green-500"
+                            : activity.type === "student_deleted"
+                              ? "bg-red-500"
+                              : activity.type === "csv_imported"
+                                ? "bg-sbie-brown"
+                                : activity.type === "student_edited"
+                                  ? "bg-sbie-green-olive"
+                                  : "bg-sbie-green-gray"
+                        }`}
+                      ></div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-sbie-green-dark">
                           {activity.message}
@@ -310,12 +355,15 @@ export default function Index() {
                             </p>
                           )}
                           <p className="text-xs text-sbie-green-gray ml-auto">
-                            {new Date(activity.timestamp).toLocaleString('pt-BR', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              day: '2-digit',
-                              month: '2-digit'
-                            })}
+                            {new Date(activity.timestamp).toLocaleString(
+                              "pt-BR",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                day: "2-digit",
+                                month: "2-digit",
+                              },
+                            )}
                           </p>
                         </div>
                       </div>
