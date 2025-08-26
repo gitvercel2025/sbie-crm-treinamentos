@@ -26,15 +26,13 @@ interface NavigationItem {
   name: string;
   icon: any;
   href: string;
-  active?: boolean;
 }
 
 const navigationItems: NavigationItem[] = [
-  { name: "Dashboard", icon: Home, href: "/", active: true },
+  { name: "Dashboard", icon: Home, href: "/" },
   { name: "Alunos", icon: Users, href: "/students" },
   { name: "Treinamentos", icon: BookOpen, href: "/trainings" },
   { name: "Relatórios", icon: BarChart3, href: "/reports" },
-  { name: "Importar", icon: Upload, href: "/import" },
   { name: "Configurações", icon: Settings, href: "/settings" },
 ];
 
@@ -66,6 +64,8 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div className="min-h-screen bg-sbie-beige-light/20">
@@ -111,13 +111,15 @@ export default function DashboardLayout({
             <div className="space-y-2">
               {navigationItems.map((item) => {
                 const Icon = item.icon;
+                const isActive = location.pathname === item.href;
                 return (
                   <Button
                     key={item.name}
-                    variant={item.active ? "default" : "ghost"}
+                    variant={isActive ? "default" : "ghost"}
+                    onClick={() => navigate(item.href)}
                     className={cn(
                       "w-full justify-start text-left font-medium",
-                      item.active
+                      isActive
                         ? "bg-sbie-brown text-white hover:bg-sbie-brown/80"
                         : "text-sbie-beige-light hover:bg-sbie-green-olive hover:text-white"
                     )}
