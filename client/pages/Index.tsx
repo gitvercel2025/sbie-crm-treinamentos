@@ -9,65 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { Users, BookOpen, TrendingUp, Award, Upload, Download } from "lucide-react";
 
-// Sample data - in a real app this would come from CSV files
-const sampleStudents: Student[] = [
-  {
-    id: "1",
-    nome: "Ana Silva Santos",
-    celular: "+55 11 99999-1234",
-    email: "ana.silva@email.com",
-    treinamento: "Formação em Inteligência Emocional"
-  },
-  {
-    id: "2",
-    nome: "Carlos Eduardo Oliveira",
-    celular: "+55 11 98888-5678",
-    email: "carlos.eduardo@email.com",
-    treinamento: "Formação Master em Inteligência Emocional"
-  },
-  {
-    id: "3",
-    nome: "Mariana Costa",
-    celular: "+55 11 97777-9012",
-    email: "mariana.costa@email.com",
-    treinamento: "Inteligência Emocional Online"
-  },
-  {
-    id: "4",
-    nome: "Roberto Fernandes",
-    celular: "+55 11 96666-3456",
-    email: "roberto.fernandes@email.com",
-    treinamento: "Lotus Inteligência Emocional"
-  },
-  {
-    id: "5",
-    nome: "Juliana Rodrigues",
-    celular: "+55 11 95555-7890",
-    email: "juliana.rodrigues@email.com",
-    treinamento: "Superação Emocional"
-  },
-  {
-    id: "6",
-    nome: "Fernando Santos",
-    celular: "+55 11 94444-1234",
-    email: "fernando.santos@email.com",
-    treinamento: "Conexão 2020"
-  },
-  {
-    id: "7",
-    nome: "Camila Ferreira",
-    celular: "+55 11 93333-5678",
-    email: "camila.ferreira@email.com",
-    treinamento: "Formação em Inteligência Emocional"
-  },
-  {
-    id: "8",
-    nome: "Diego Almeida",
-    celular: "+55 11 92222-9012",
-    email: "diego.almeida@email.com",
-    treinamento: "Desperte o seu talento"
-  }
-];
+// Start with empty student list - real data will be imported from CSV files
+const initialStudents: Student[] = [];
 
 export default function Index() {
   const [students, setStudents] = useState<Student[]>(sampleStudents);
