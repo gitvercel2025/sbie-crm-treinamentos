@@ -21,6 +21,7 @@ export default function Index() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
+  const [selectedTraining, setSelectedTraining] = useState<string>("all");
 
   // Calculate stats
   const totalStudents = students.length;
