@@ -16,6 +16,8 @@ const initialStudents: Student[] = [];
 export default function Index() {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [importModalOpen, setImportModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
   // Calculate stats
   const totalStudents = students.length;
@@ -38,8 +40,35 @@ export default function Index() {
   }, [] as { name: string; students: number }[]);
 
   const handleEditStudent = (student: Student) => {
-    console.log("Edit student:", student);
-    // TODO: Implement edit functionality
+    setSelectedStudent(student);
+    setEditModalOpen(true);
+  };
+
+  const handleSaveStudent = (updatedStudent: Student) => {
+    setStudents(prev =>
+      prev.map(s => s.id === updatedStudent.id ? updatedStudent : s)
+    );
+    toast({
+      title: "Aluno atualizado",
+      description: `${updatedStudent.nome} foi atualizado com sucesso`,
+    });
+  };
+
+  const handleAddStudent = () => {
+    setSelectedStudent(null);
+    setEditModalOpen(true);
+  };
+
+  const handleCreateStudent = (newStudent: Student) => {
+    const studentWithId = {
+      ...newStudent,
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    };
+    setStudents(prev => [...prev, studentWithId]);
+    toast({
+      title: "Aluno adicionado",
+      description: `${newStudent.nome} foi adicionado com sucesso`,
+    });
   };
 
   const handleDeleteStudent = (id: string) => {
@@ -215,6 +244,14 @@ export default function Index() {
           open={importModalOpen}
           onOpenChange={setImportModalOpen}
           onImport={handleImportCSV}
+        />
+
+        {/* Edit Student Modal */}
+        <EditStudentModal
+          student={selectedStudent}
+          open={editModalOpen}
+          onOpenChange={setEditModalOpen}
+          onSave={selectedStudent ? handleSaveStudent : handleCreateStudent}
         />
       </div>
     </DashboardLayout>
