@@ -5,6 +5,7 @@ import TrainingChart from "@/components/dashboard/TrainingChart";
 import StudentsTable, { Student } from "@/components/dashboard/StudentsTable";
 import CSVImportModal from "@/components/dashboard/CSVImportModal";
 import EditStudentModal from "@/components/dashboard/EditStudentModal";
+import DeleteConfirmDialog from "@/components/dashboard/DeleteConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
@@ -17,7 +18,9 @@ export default function Index() {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
 
   // Calculate stats
   const totalStudents = students.length;
@@ -72,7 +75,23 @@ export default function Index() {
   };
 
   const handleDeleteStudent = (id: string) => {
-    setStudents(prev => prev.filter(s => s.id !== id));
+    const student = students.find(s => s.id === id);
+    if (student) {
+      setStudentToDelete(student);
+      setDeleteDialogOpen(true);
+    }
+  };
+
+  const confirmDeleteStudent = () => {
+    if (studentToDelete) {
+      setStudents(prev => prev.filter(s => s.id !== studentToDelete.id));
+      toast({
+        title: "Aluno excluído",
+        description: `${studentToDelete.nome} foi removido do sistema`,
+      });
+      setStudentToDelete(null);
+      setDeleteDialogOpen(false);
+    }
   };
 
   const handleWhatsAppStudent = (student: Student) => {
@@ -260,6 +279,14 @@ export default function Index() {
           open={editModalOpen}
           onOpenChange={setEditModalOpen}
           onSave={selectedStudent ? handleSaveStudent : handleCreateStudent}
+        />
+
+        {/* Delete Confirmation Dialog */}
+        <DeleteConfirmDialog
+          student={studentToDelete}
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          onConfirm={confirmDeleteStudent}
         />
       </div>
     </DashboardLayout>
