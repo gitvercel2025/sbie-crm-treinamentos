@@ -6,7 +6,7 @@ import StudentsTable, { Student } from "@/components/dashboard/StudentsTable";
 import CSVImportModal from "@/components/dashboard/CSVImportModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Users, BookOpen, TrendingUp, Award, Upload, Download } from "lucide-react";
 
 // Sample data - in a real app this would come from CSV files
