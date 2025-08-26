@@ -13,7 +13,7 @@ import { Users, BookOpen, TrendingUp, Award, Upload, Download } from "lucide-rea
 const initialStudents: Student[] = [];
 
 export default function Index() {
-  const [students, setStudents] = useState<Student[]>(sampleStudents);
+  const [students, setStudents] = useState<Student[]>(initialStudents);
   const [importModalOpen, setImportModalOpen] = useState(false);
 
   // Calculate stats
