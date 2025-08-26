@@ -36,21 +36,23 @@ interface CSVPreview {
 }
 
 const TRAINING_OPTIONS = [
-  "Formação em Inteligência Emocional",
-  "Formação Master em Inteligência Emocional",
-  "Inteligência Emocional Online",
-  "Lotus Inteligência Emocional",
-  "Superação Emocional",
+  "ASBIE",
+  "Comunidade Portal",
   "Conexão 2020",
   "Desperte o seu talento",
   "Embaixadores do Bem",
+  "Formação em Inteligência Emocional",
+  "Formação Master em Inteligência Emocional",
   "Imersão Inside",
+  "Inteligência Emocional Online",
   "Liberdade Financeira",
+  "Lotus Inteligência Emocional",
   "Lotus Legado",
   "Origens Inteligência Emocional",
   "Reencontro IE para Casais",
   "SBIE Care",
   "Sócio SBIE",
+  "Superação Emocional",
   "Workshop Mulheres",
 ];
 
