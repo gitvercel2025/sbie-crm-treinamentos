@@ -153,7 +153,10 @@ export default function Index() {
               Dashboard SBIE CRM
             </h1>
             <p className="mt-2 text-sbie-green-gray">
-              Gerencie os alunos da Sociedade Brasileira de Inteligência Emocional
+              {selectedTraining === "all"
+                ? "Gerencie os alunos da Sociedade Brasileira de Inteligência Emocional"
+                : `Visualizando alunos de: ${selectedTraining}`
+              }
             </p>
           </div>
           <div className="mt-4 sm:mt-0 flex flex-wrap gap-3">
