@@ -58,7 +58,11 @@ const trainingItems = [
   "Workshop Mulheres",
 ];
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function DashboardLayout({
+  children,
+  selectedTraining = "all",
+  onTrainingSelect
+}: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
