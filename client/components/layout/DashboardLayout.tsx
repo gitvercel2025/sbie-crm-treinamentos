@@ -134,12 +134,30 @@ export default function DashboardLayout({
                 Treinamentos
               </h3>
               <div className="space-y-1 max-h-72 overflow-y-auto scrollbar-thin scrollbar-track-sbie-green-dark scrollbar-thumb-sbie-green-olive hover:scrollbar-thumb-sbie-brown">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onTrainingSelect?.("all")}
+                  className={`w-full justify-start text-left text-sm p-3 rounded-lg transition-all duration-200 group ${
+                    selectedTraining === "all"
+                      ? "bg-sbie-brown text-white"
+                      : "text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white"
+                  }`}
+                >
+                  <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
+                  <span className="truncate font-medium">Todos os Treinamentos</span>
+                </Button>
                 {trainingItems.map((training) => (
                   <Button
                     key={training}
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start text-left text-sm text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white p-3 rounded-lg transition-all duration-200 group"
+                    onClick={() => onTrainingSelect?.(training)}
+                    className={`w-full justify-start text-left text-sm p-3 rounded-lg transition-all duration-200 group ${
+                      selectedTraining === training
+                        ? "bg-sbie-brown text-white"
+                        : "text-sbie-beige-light/90 hover:bg-sbie-green-olive hover:text-white"
+                    }`}
                   >
                     <BookOpen className="mr-3 h-4 w-4 flex-shrink-0 group-hover:text-sbie-beige-light" />
                     <span className="truncate font-medium">{training}</span>
