@@ -127,7 +127,14 @@ export default function Index() {
               Gerencie os alunos da Sociedade Brasileira de Inteligência Emocional
             </p>
           </div>
-          <div className="mt-4 sm:mt-0 flex gap-3">
+          <div className="mt-4 sm:mt-0 flex flex-wrap gap-3">
+            <Button
+              onClick={handleAddStudent}
+              className="bg-sbie-green-dark hover:bg-sbie-green-dark/80"
+            >
+              <Users className="mr-2 h-4 w-4" />
+              Novo Aluno
+            </Button>
             <Button
               onClick={() => setImportModalOpen(true)}
               className="bg-sbie-brown hover:bg-sbie-brown/80"
@@ -135,10 +142,11 @@ export default function Index() {
               <Upload className="mr-2 h-4 w-4" />
               Importar CSV
             </Button>
-            <Button 
+            <Button
               onClick={handleExportCSV}
-              variant="outline" 
+              variant="outline"
               className="border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white"
+              disabled={students.length === 0}
             >
               <Download className="mr-2 h-4 w-4" />
               Exportar
