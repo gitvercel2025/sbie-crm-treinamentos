@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,40 +27,23 @@ import {
   Download,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { settingsService } from "@/services/dataService";
 
 export default function Settings() {
-  const [settings, setSettings] = useState({
-    // Organization Settings
-    organizationName: "SBIE - Sociedade Brasileira de Inteligência Emocional",
-    organizationEmail: "contato@sbie.com.br",
-    organizationPhone: "+55 11 99999-9999",
-    organizationAddress: "São Paulo, SP - Brasil",
+  const [settings, setSettings] = useState(settingsService.get());
 
-    // Notification Settings
-    emailNotifications: true,
-    smsNotifications: false,
-    reportNotifications: true,
-    studentNotifications: true,
+  // Load settings from localStorage on component mount
+  useEffect(() => {
+    setSettings(settingsService.get());
+  }, []);
 
-    // System Settings
-    language: "pt-BR",
-    timezone: "America/Sao_Paulo",
-    dateFormat: "DD/MM/YYYY",
-    currency: "BRL",
-
-    // Security Settings
-    twoFactorAuth: false,
-    sessionTimeout: "30",
-    passwordExpiry: "90",
-
-    // Appearance Settings
-    theme: "light",
-    compactMode: false,
-    sidebarCollapsed: false,
-  });
+  // Save settings to localStorage whenever settings change
+  useEffect(() => {
+    settingsService.save(settings);
+  }, [settings]);
 
   const handleSave = () => {
-    // Here you would typically save to a backend
+    settingsService.save(settings);
     toast({
       title: "Configurações salvas",
       description: "Suas configurações foram atualizadas com sucesso",
