@@ -197,6 +197,37 @@ export default function Settings() {
     }
   };
 
+  const handleImportSettings = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const importedSettings = JSON.parse(e.target?.result as string);
+            setSettings(importedSettings);
+            settingsService.save(importedSettings);
+            toast({
+              title: "Configurações importadas",
+              description: "Configurações foram importadas e aplicadas com sucesso",
+            });
+          } catch (error) {
+            toast({
+              title: "Erro na importação",
+              description: "Arquivo de configurações inválido",
+              variant: "destructive",
+            });
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
