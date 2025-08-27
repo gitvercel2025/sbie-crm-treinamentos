@@ -3,21 +3,16 @@
   "buildCommand": "npm run build:client",
   "outputDirectory": "dist/spa",
   "functions": {
-    "api/**/*.ts": {
-      "runtime": "nodejs20.x"
-    }
+    "api/*.ts": "nodejs20.x"
   },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "dest": "/api/index"
     },
     {
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
