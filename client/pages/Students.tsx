@@ -59,6 +59,11 @@ export default function Students() {
   const confirmDeleteStudent = () => {
     if (studentToDelete) {
       setStudents((prev) => prev.filter((s) => s.id !== studentToDelete.id));
+      activitiesService.add({
+        type: "student_deleted",
+        message: `Aluno ${studentToDelete.nome} foi removido`,
+        details: `Treinamento: ${studentToDelete.treinamento}`,
+      });
       toast({
         title: "Aluno excluído",
         description: `${studentToDelete.nome} foi removido do sistema`,
@@ -74,6 +79,11 @@ export default function Students() {
 
   const handleImportCSV = (newStudents: Student[], trainingName: string) => {
     setStudents((prev) => [...prev, ...newStudents]);
+    activitiesService.add({
+      type: "csv_imported",
+      message: `Dados CSV importados`,
+      details: `${newStudents.length} aluno(s) importado(s) para ${trainingName}`,
+    });
     toast({
       title: "Importação concluída",
       description: `${newStudents.length} alunos importados para ${trainingName}`,
