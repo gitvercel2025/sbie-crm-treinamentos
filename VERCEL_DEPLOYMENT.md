@@ -5,22 +5,32 @@ This guide explains how to deploy the SBIE CRM application to Vercel.
 ## Prerequisites
 
 1. A Vercel account (sign up at [vercel.com](https://vercel.com))
-2. Vercel CLI installed globally: `npm i -g vercel`
+2. Git repository with your code
 
 ## Deployment Steps
 
-### Option 1: Deploy via Vercel Dashboard (Recommended)
+### Recommended: Deploy via Vercel Dashboard
 
-1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
-2. Go to [vercel.com](https://vercel.com) and sign in
-3. Click "New Project"
-4. Import your Git repository
-5. Vercel will automatically detect the configuration from `vercel.json`
-6. Click "Deploy"
+1. **Push your code to a Git repository** (GitHub, GitLab, or Bitbucket)
 
-### Option 2: Deploy via CLI
+2. **Go to [vercel.com](https://vercel.com)** and sign in
 
-1. Install Vercel CLI globally:
+3. **Click "New Project"**
+
+4. **Import your Git repository**
+
+5. **Vercel will automatically detect the configuration from `vercel.json`**
+
+6. **Important: Use these build settings:**
+   - Build Command: `npm run build:client`
+   - Output Directory: `dist/spa`
+   - Install Command: `npm install` (not pnpm)
+
+7. **Click "Deploy"**
+
+### Alternative: Deploy via CLI
+
+1. Install Vercel CLI:
    ```bash
    npm i -g vercel
    ```
@@ -32,10 +42,14 @@ This guide explains how to deploy the SBIE CRM application to Vercel.
 
 3. From the project root, run:
    ```bash
-   vercel
+   vercel --build-env NPM_RC=""
    ```
 
-4. Follow the prompts to configure your deployment
+## Important Notes
+
+- **Package Manager**: Vercel works better with `npm` than `pnpm` for this configuration
+- **Build Process**: Only the client app is built and deployed as a static site
+- **API Routes**: Simple serverless functions are configured in `/api/`
 
 ## Configuration
 
