@@ -27,7 +27,7 @@ import {
   Download,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { settingsService } from "@/services/dataService";
+import { settingsService, studentsService, trainingsService, activitiesService } from "@/services/dataService";
 
 export default function Settings() {
   const [settings, setSettings] = useState(settingsService.get());
