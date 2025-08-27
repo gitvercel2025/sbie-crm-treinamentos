@@ -244,6 +244,14 @@ export default function Settings() {
           <div className="mt-4 sm:mt-0 flex gap-3">
             <Button
               variant="outline"
+              onClick={handleImportSettings}
+              className="border-sbie-green-gray text-sbie-green-gray hover:bg-sbie-green-gray hover:text-white"
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Importar
+            </Button>
+            <Button
+              variant="outline"
               onClick={handleExportSettings}
               className="border-sbie-green-olive text-sbie-green-olive hover:bg-sbie-green-olive hover:text-white"
             >
