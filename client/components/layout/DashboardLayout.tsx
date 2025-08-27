@@ -1,5 +1,6 @@
 import { useState, ReactNode } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ import {
   GraduationCap,
   ChevronDown,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -74,6 +76,11 @@ export default function DashboardLayout({
   const [trainingsOpen, setTrainingsOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className="min-h-screen bg-sbie-beige-light/20">
@@ -193,6 +200,18 @@ export default function DashboardLayout({
               </Collapsible>
             </div>
           </nav>
+
+          {/* Logout Button */}
+          <div className="px-6 pb-6">
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="w-full justify-start text-sbie-beige-light hover:bg-red-600 hover:text-white transition-colors duration-200"
+            >
+              <LogOut className="mr-3 h-5 w-5" />
+              Sair do Sistema
+            </Button>
+          </div>
         </div>
       </div>
 
