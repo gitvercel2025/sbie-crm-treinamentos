@@ -663,6 +663,7 @@ export default function Settings() {
               <CardContent className="space-y-3">
                 <Button
                   variant="outline"
+                  onClick={handleBackupData}
                   className="w-full border-sbie-green-olive text-sbie-green-olive hover:bg-sbie-green-olive hover:text-white"
                 >
                   <Upload className="mr-2 h-4 w-4" />
@@ -671,6 +672,7 @@ export default function Settings() {
 
                 <Button
                   variant="outline"
+                  onClick={handleExportData}
                   className="w-full border-sbie-brown text-sbie-brown hover:bg-sbie-brown hover:text-white"
                 >
                   <Download className="mr-2 h-4 w-4" />
@@ -679,6 +681,7 @@ export default function Settings() {
 
                 <Button
                   variant="outline"
+                  onClick={handleClearCache}
                   className="w-full border-red-500 text-red-600 hover:bg-red-50"
                 >
                   <Database className="mr-2 h-4 w-4" />
