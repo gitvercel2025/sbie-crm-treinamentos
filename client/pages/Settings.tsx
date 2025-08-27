@@ -65,6 +65,138 @@ export default function Settings() {
     });
   };
 
+  const handleBackupData = () => {
+    try {
+      // Collect all application data
+      const allData = {
+        settings: settings,
+        students: studentsService.getAll(),
+        trainings: trainingsService.getAll(),
+        activities: activitiesService.getAll(),
+        exportDate: new Date().toISOString(),
+        version: "1.0.0"
+      };
+
+      const dataStr = JSON.stringify(allData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `sbie-backup-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+
+      toast({
+        title: "Backup criado",
+        description: "Backup completo dos dados baixado com sucesso",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro no backup",
+        description: "Não foi possível criar o backup dos dados",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleExportData = () => {
+    try {
+      const students = studentsService.getAll();
+      const trainings = trainingsService.getAll();
+
+      if (students.length === 0 && trainings.length === 0) {
+        toast({
+          title: "Nenhum dado para exportar",
+          description: "Não há alunos ou treinamentos cadastrados",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Create CSV content for students
+      const studentsCSV = [
+        ["Nome", "Celular", "Email", "Treinamento"].join(","),
+        ...students.map((student) =>
+          [
+            `"${student.nome}"`,
+            `"${student.celular}"`,
+            `"${student.email}"`,
+            `"${student.treinamento}"`,
+          ].join(",")
+        ),
+      ].join("\n");
+
+      // Create CSV content for trainings
+      const trainingsCSV = [
+        ["Nome", "Descrição", "Status", "Alunos", "Data Início", "Duração", "Instrutor"].join(","),
+        ...trainings.map((training) =>
+          [
+            `"${training.name}"`,
+            `"${training.description}"`,
+            `"${training.status}"`,
+            training.students,
+            `"${training.startDate}"`,
+            `"${training.duration}"`,
+            `"${training.instructor}"`,
+          ].join(",")
+        ),
+      ].join("\n");
+
+      // Create a zip-like structure with both CSVs
+      const exportData = {
+        students_csv: studentsCSV,
+        trainings_csv: trainingsCSV,
+        export_date: new Date().toISOString(),
+        total_students: students.length,
+        total_trainings: trainings.length
+      };
+
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `sbie-data-export-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+
+      toast({
+        title: "Dados exportados",
+        description: `${students.length} alunos e ${trainings.length} treinamentos exportados`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro na exportação",
+        description: "Não foi possível exportar os dados",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleClearCache = () => {
+    try {
+      // Clear browser cache data (localStorage)
+      const keysToKeep = ['sbie-auth']; // Keep authentication
+      const keysToRemove = ['sbie-students', 'sbie-trainings', 'sbie-activities'];
+
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+      });
+
+      // Reset activities and reload data
+      setSettings(settingsService.get());
+
+      toast({
+        title: "Cache limpo",
+        description: "Cache e dados temporários foram limpos com sucesso",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao limpar cache",
+        description: "Não foi possível limpar o cache",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
