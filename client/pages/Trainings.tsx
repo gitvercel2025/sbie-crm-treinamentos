@@ -8,6 +8,7 @@ import EditTrainingModal, {
 } from "@/components/dashboard/EditTrainingModal";
 import DeleteTrainingConfirmDialog from "@/components/dashboard/DeleteTrainingConfirmDialog";
 import { useToast } from "@/hooks/use-toast";
+import { trainingsService, activitiesService } from "@/services/dataService";
 import {
   BookOpen,
   Users,
@@ -40,28 +41,6 @@ const TRAINING_LIST = [
   "Workshop Mulheres",
 ];
 
-// Helper functions for localStorage
-const getTrainingsFromStorage = (): Training[] => {
-  try {
-    const stored = localStorage.getItem("sbie-trainings");
-    if (stored) {
-      return JSON.parse(stored);
-    }
-  } catch (error) {
-    console.error("Error loading trainings from localStorage:", error);
-  }
-
-  // Return empty array - data will be added through real imports only
-  return [];
-};
-
-const saveTrainingsToStorage = (trainings: Training[]) => {
-  try {
-    localStorage.setItem("sbie-trainings", JSON.stringify(trainings));
-  } catch (error) {
-    console.error("Error saving trainings to localStorage:", error);
-  }
-};
 
 export default function Trainings() {
   const [trainings, setTrainings] = useState<Training[]>([]);
@@ -75,13 +54,13 @@ export default function Trainings() {
 
   // Load trainings from localStorage on component mount
   useEffect(() => {
-    setTrainings(getTrainingsFromStorage());
+    setTrainings(trainingsService.getAll());
   }, []);
 
   // Save trainings to localStorage whenever trainings change
   useEffect(() => {
-    if (trainings.length > 0) {
-      saveTrainingsToStorage(trainings);
+    if (trainings.length >= 0) { // Save even empty arrays
+      trainingsService.save(trainings);
     }
   }, [trainings]);
 
@@ -132,6 +111,11 @@ export default function Trainings() {
         // Update existing training
         const updated = [...prev];
         updated[existingIndex] = training;
+        activitiesService.add({
+          type: "training_edited",
+          message: `Treinamento ${training.name} foi atualizado`,
+          details: `Status: ${training.status}, Alunos: ${training.students}`,
+        });
         toast({
           title: "Treinamento atualizado",
           description: `${training.name} foi atualizado com sucesso.`,
@@ -139,6 +123,11 @@ export default function Trainings() {
         return updated;
       } else {
         // Add new training
+        activitiesService.add({
+          type: "training_added",
+          message: `Novo treinamento ${training.name} criado`,
+          details: `Instrutor: ${training.instructor}, Duração: ${training.duration}`,
+        });
         toast({
           title: "Treinamento criado",
           description: `${training.name} foi criado com sucesso.`,
@@ -151,6 +140,11 @@ export default function Trainings() {
   const confirmDeleteTraining = () => {
     if (deletingTraining) {
       setTrainings((prev) => prev.filter((t) => t.id !== deletingTraining.id));
+      activitiesService.add({
+        type: "training_deleted",
+        message: `Treinamento ${deletingTraining.name} foi excluído`,
+        details: `Tinha ${deletingTraining.students} aluno(s) matriculado(s)`,
+      });
       toast({
         title: "Treinamento excluído",
         description: `${deletingTraining.name} foi excluído com sucesso.`,
