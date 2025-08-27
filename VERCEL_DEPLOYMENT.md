@@ -31,11 +31,13 @@ This guide explains how to deploy the SBIE CRM application to Vercel.
 ### Alternative: Deploy via CLI
 
 1. Install Vercel CLI:
+
    ```bash
    npm i -g vercel
    ```
 
 2. Login to Vercel:
+
    ```bash
    vercel login
    ```
@@ -68,6 +70,7 @@ If you need to set environment variables:
 2. Via CLI: Use `vercel env add [name]`
 
 Common environment variables:
+
 - `NODE_ENV=production` (automatically set by Vercel)
 - `PING_MESSAGE` (for API testing)
 
@@ -86,16 +89,19 @@ Common environment variables:
 ## API Routes
 
 After deployment, your API will be available at:
+
 - `https://your-app.vercel.app/api/ping`
 - `https://your-app.vercel.app/api/demo`
 
 ## Troubleshooting
 
 ### Build Issues
+
 - Ensure all dependencies are in `package.json`
 - Check that `npm run build:client` works locally
 
 ### API Issues
+
 - Check function logs in Vercel Dashboard
 - Verify environment variables are set correctly
 - Ensure API routes match the expected structure
@@ -123,5 +129,6 @@ After deployment, your application will be available at:
 ## Custom Domain
 
 To add a custom domain:
+
 1. Go to Project Settings → Domains in Vercel Dashboard
 2. Add your domain and follow DNS configuration instructions
