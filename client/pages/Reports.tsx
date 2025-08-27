@@ -224,39 +224,51 @@ export default function Reports() {
 
           <CardContent>
             <div className="space-y-4">
-              {recentReports.map((report, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 bg-sbie-beige-light/20 rounded-lg"
-                >
-                  <div className="flex items-center">
-                    <div className="p-2 rounded-lg bg-sbie-green-dark/10">
-                      <FileText className="h-5 w-5 text-sbie-green-dark" />
-                    </div>
-                    <div className="ml-4">
-                      <p className="font-medium text-sbie-green-dark">
-                        {report.name}
-                      </p>
-                      <p className="text-sm text-sbie-green-gray">
-                        {report.type} • {report.size} • {report.date}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
-                      {report.status}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-sbie-brown hover:bg-sbie-brown/10"
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                  </div>
+              {recentReports.length === 0 ? (
+                <div className="text-center py-12">
+                  <FileText className="h-12 w-12 text-sbie-green-gray mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-sbie-green-dark mb-2">
+                    Nenhum relatório gerado ainda
+                  </h3>
+                  <p className="text-sbie-green-gray">
+                    Os relatórios gerados aparecerão aqui quando você criar o primeiro.
+                  </p>
                 </div>
-              ))}
+              ) : (
+                recentReports.map((report, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-sbie-beige-light/20 rounded-lg"
+                  >
+                    <div className="flex items-center">
+                      <div className="p-2 rounded-lg bg-sbie-green-dark/10">
+                        <FileText className="h-5 w-5 text-sbie-green-dark" />
+                      </div>
+                      <div className="ml-4">
+                        <p className="font-medium text-sbie-green-dark">
+                          {report.name}
+                        </p>
+                        <p className="text-sm text-sbie-green-gray">
+                          {report.type} • {report.size} • {report.date}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                        {report.status}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-sbie-brown hover:bg-sbie-brown/10"
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </CardContent>
         </Card>
