@@ -59,60 +59,38 @@ export default function Reports() {
   const quickStats = [
     {
       label: "Total de Relatórios Gerados",
-      value: "47",
-      change: "+12%",
+      value: "0",
+      change: "0%",
       period: "este mês",
     },
     {
       label: "Última Atualização",
-      value: "Hoje",
-      change: "16:30",
+      value: "Nunca",
+      change: "--:--",
       period: "horário",
     },
     {
       label: "Relatórios Agendados",
-      value: "3",
-      change: "pendentes",
+      value: "0",
+      change: "nenhum",
       period: "esta semana",
     },
     {
       label: "Exportações",
-      value: "128",
-      change: "+8%",
+      value: "0",
+      change: "0%",
       period: "este mês",
     },
   ];
 
-  const recentReports = [
-    {
-      name: "Relatório Mensal de Alunos",
-      type: "PDF",
-      date: "Hoje, 14:30",
-      size: "2.3 MB",
-      status: "Concluído",
-    },
-    {
-      name: "Análise de Performance Q4",
-      type: "Excel",
-      date: "Ontem, 16:45",
-      size: "1.8 MB",
-      status: "Concluído",
-    },
-    {
-      name: "Relatório de Certificações",
-      type: "PDF",
-      date: "2 dias atrás",
-      size: "945 KB",
-      status: "Concluído",
-    },
-    {
-      name: "Dashboard Executivo",
-      type: "PDF",
-      date: "3 dias atrás",
-      size: "3.2 MB",
-      status: "Concluído",
-    },
-  ];
+  const recentReports: Array<{
+    name: string;
+    type: string;
+    date: string;
+    size: string;
+    status: string;
+  }> = [];
+  // Reports will be populated with real data after generating actual reports
 
   return (
     <DashboardLayout>
