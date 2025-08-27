@@ -51,29 +51,8 @@ const getTrainingsFromStorage = (): Training[] => {
     console.error("Error loading trainings from localStorage:", error);
   }
 
-  // Return default trainings if no stored data
-  return TRAINING_LIST.map((name, index) => ({
-    id: `training-${index}`,
-    name,
-    description: `Curso focado em desenvolvimento de inteligência emocional através de ${name.toLowerCase()}`,
-    students: Math.floor(Math.random() * 50) + 10,
-    status: ["active", "inactive", "planned"][
-      Math.floor(Math.random() * 3)
-    ] as Training["status"],
-    startDate: new Date(
-      2024,
-      Math.floor(Math.random() * 12),
-      Math.floor(Math.random() * 28) + 1,
-    )
-      .toISOString()
-      .split("T")[0],
-    duration: ["4 semanas", "6 semanas", "8 semanas", "12 semanas"][
-      Math.floor(Math.random() * 4)
-    ],
-    instructor: ["Ana Silva", "Carlos Santos", "Maria Oliveira", "João Costa"][
-      Math.floor(Math.random() * 4)
-    ],
-  }));
+  // Return empty array - data will be added through real imports only
+  return [];
 };
 
 const saveTrainingsToStorage = (trainings: Training[]) => {
