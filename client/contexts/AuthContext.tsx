@@ -57,9 +57,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('sbie-auth');
-    // Clear all application data on logout if needed
-    // localStorage.removeItem('sbie-students');
-    // localStorage.removeItem('sbie-trainings');
+    // Clear all application data on logout
+    clearAllData();
   };
 
   const value = {
