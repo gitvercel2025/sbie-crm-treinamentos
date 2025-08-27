@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import StatsCard from "@/components/dashboard/StatsCard";
 import TrainingChart from "@/components/dashboard/TrainingChart";
@@ -9,6 +9,7 @@ import DeleteConfirmDialog from "@/components/dashboard/DeleteConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
+import { studentsService, activitiesService, type Activity } from "@/services/dataService";
 import {
   Users,
   BookOpen,
@@ -18,19 +19,8 @@ import {
   Download,
 } from "lucide-react";
 
-// Start with empty student list - real data will be imported from CSV files
-const initialStudents: Student[] = [];
-
-interface Activity {
-  id: string;
-  type: "student_added" | "student_deleted" | "csv_imported" | "student_edited";
-  message: string;
-  timestamp: Date;
-  details?: string;
-}
-
 export default function Index() {
-  const [students, setStudents] = useState<Student[]>(initialStudents);
+  const [students, setStudents] = useState<Student[]>([]);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -39,18 +29,25 @@ export default function Index() {
   const [selectedTraining, setSelectedTraining] = useState<string>("all");
   const [activities, setActivities] = useState<Activity[]>([]);
 
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    setStudents(studentsService.getAll());
+    setActivities(activitiesService.getAll());
+  }, []);
+
+  // Save students data whenever it changes
+  useEffect(() => {
+    if (students.length >= 0) { // Save even empty arrays
+      studentsService.save(students);
+    }
+  }, [students]);
+
   const addActivity = (
     type: Activity["type"],
     message: string,
     details?: string,
   ) => {
-    const newActivity: Activity = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      type,
-      message,
-      timestamp: new Date(),
-      details,
-    };
+    const newActivity = activitiesService.add({ type, message, details });
     setActivities((prev) => [newActivity, ...prev.slice(0, 9)]); // Keep only last 10 activities
   };
 
