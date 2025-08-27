@@ -275,8 +275,28 @@ export default function Trainings() {
         </div>
 
         {/* Trainings Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trainings.map((training) => (
+        {trainings.length === 0 ? (
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-12 text-center">
+              <BookOpen className="h-16 w-16 text-sbie-green-gray mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-sbie-green-dark mb-2">
+                Nenhum treinamento cadastrado
+              </h3>
+              <p className="text-sbie-green-gray mb-6">
+                Comece criando seu primeiro treinamento ou importe dados via CSV.
+              </p>
+              <Button
+                onClick={handleNewTraining}
+                className="bg-sbie-brown hover:bg-sbie-brown/80"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Criar Primeiro Treinamento
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {trainings.map((training) => (
             <Card
               key={training.id}
               className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-200"
@@ -352,8 +372,9 @@ export default function Trainings() {
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Modals */}
         <EditTrainingModal
