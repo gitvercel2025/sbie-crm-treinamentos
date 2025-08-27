@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { clearAllData } from '@/services/dataService';
 
 interface AuthContextType {
   isAuthenticated: boolean;
