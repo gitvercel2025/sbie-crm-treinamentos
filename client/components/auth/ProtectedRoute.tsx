@@ -10,11 +10,33 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!loading && !isAuthenticated && location.pathname !== "/login") {
-      navigate("/login", { replace: true });
+      // Add small delay to prevent rapid redirects that cause DOM errors
+      timeoutRef.current = setTimeout(() => {
+        if (mountedRef.current) {
+          navigate("/login", { replace: true });
+        }
+      }, 50);
     }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, [isAuthenticated, loading, navigate, location.pathname]);
 
   if (loading) {
