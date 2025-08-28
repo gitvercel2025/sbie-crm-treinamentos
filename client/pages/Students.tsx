@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import StudentsTable, { Student } from "@/components/dashboard/StudentsTable";
 import EditStudentModal from "@/components/dashboard/EditStudentModal";
@@ -7,9 +7,23 @@ import CSVImportModal from "@/components/dashboard/CSVImportModal";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { Users, Upload, Download, Plus } from "lucide-react";
+import { studentsService, activitiesService } from "@/services/dataService";
 
 export default function Students() {
   const [students, setStudents] = useState<Student[]>([]);
+
+  // Load students from localStorage on component mount
+  useEffect(() => {
+    const savedStudents = studentsService.getAll();
+    setStudents(savedStudents);
+  }, []);
+
+  // Save students to localStorage whenever students change
+  useEffect(() => {
+    if (students.length > 0 || studentsService.getAll().length > 0) {
+      studentsService.save(students);
+    }
+  }, [students]);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -25,6 +39,11 @@ export default function Students() {
     setStudents((prev) =>
       prev.map((s) => (s.id === updatedStudent.id ? updatedStudent : s)),
     );
+    activitiesService.add({
+      type: "student_edited",
+      message: `Aluno ${updatedStudent.nome} foi atualizado`,
+      details: `Treinamento: ${updatedStudent.treinamento}`,
+    });
     toast({
       title: "Aluno atualizado",
       description: `${updatedStudent.nome} foi atualizado com sucesso`,
@@ -42,6 +61,11 @@ export default function Students() {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     };
     setStudents((prev) => [...prev, studentWithId]);
+    activitiesService.add({
+      type: "student_added",
+      message: `Aluno ${newStudent.nome} foi adicionado`,
+      details: `Treinamento: ${newStudent.treinamento}`,
+    });
     toast({
       title: "Aluno adicionado",
       description: `${newStudent.nome} foi adicionado com sucesso`,
