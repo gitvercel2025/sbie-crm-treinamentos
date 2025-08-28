@@ -46,7 +46,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (username: string, password: string): Promise<boolean> => {
     // Simple authentication with hardcoded credentials
-    if (username === 'admin' && password === 'admin123') {
+    if (username === 'admin' && password === 'admin') {
       setIsAuthenticated(true);
       localStorage.setItem('sbie-auth', 'authenticated');
       return true;
