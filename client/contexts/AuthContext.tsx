@@ -31,13 +31,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const checkAuthStatus = () => {
       try {
         const authStatus = localStorage.getItem('sbie-auth');
+        console.log('Auth status from localStorage:', authStatus);
         if (authStatus === 'authenticated') {
           setIsAuthenticated(true);
+          console.log('User is authenticated from localStorage');
+        } else {
+          console.log('User is not authenticated');
         }
       } catch (error) {
         console.error('Error checking auth status:', error);
       } finally {
         setLoading(false);
+        console.log('Auth loading finished');
       }
     };
 
