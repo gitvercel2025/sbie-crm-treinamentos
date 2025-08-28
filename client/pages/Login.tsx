@@ -137,7 +137,7 @@ export default function Login() {
           <div className="mt-6 p-4 bg-sbie-beige-light/30 rounded-lg border border-sbie-green-olive/20">
             <p className="text-xs text-sbie-green-gray text-center">
               <strong>Credenciais padrão:</strong><br />
-              Usuário: admin | Senha: admin123
+              Usuário: admin | Senha: admin
             </p>
           </div>
         </CardContent>
