@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { Lock, User, Eye, EyeOff } from "lucide-react";
 
@@ -19,13 +25,13 @@ export default function Login() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!username || !password) {
       toast({
         title: "Erro",
@@ -36,16 +42,16 @@ export default function Login() {
     }
 
     setIsLoading(true);
-    
+
     try {
       const success = await login(username, password);
-      
+
       if (success) {
         toast({
           title: "Login realizado com sucesso",
           description: "Bem-vindo ao sistema SBIE!",
         });
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       } else {
         toast({
           title: "Erro de autenticação",
@@ -83,7 +89,10 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username Field */}
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium text-sbie-green-dark">
+              <Label
+                htmlFor="username"
+                className="text-sm font-medium text-sbie-green-dark"
+              >
                 Usuário
               </Label>
               <div className="relative">
@@ -102,7 +111,10 @@ export default function Login() {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-sbie-green-dark">
+              <Label
+                htmlFor="password"
+                className="text-sm font-medium text-sbie-green-dark"
+              >
                 Senha
               </Label>
               <div className="relative">
@@ -146,7 +158,8 @@ export default function Login() {
           {/* Login Hint */}
           <div className="mt-6 p-4 bg-sbie-beige-light/30 rounded-lg border border-sbie-green-olive/20">
             <p className="text-xs text-sbie-green-gray text-center">
-              <strong>Credenciais padrão:</strong><br />
+              <strong>Credenciais padrão:</strong>
+              <br />
               Usuário: admin | Senha: admin
             </p>
           </div>

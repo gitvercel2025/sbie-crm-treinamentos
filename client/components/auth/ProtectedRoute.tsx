@@ -12,8 +12,8 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
 
   useEffect(() => {
-    if (!loading && !isAuthenticated && location.pathname !== '/login') {
-      navigate('/login', { replace: true });
+    if (!loading && !isAuthenticated && location.pathname !== "/login") {
+      navigate("/login", { replace: true });
     }
   }, [isAuthenticated, loading, navigate, location.pathname]);
 
