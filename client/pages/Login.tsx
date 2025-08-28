@@ -13,7 +13,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
