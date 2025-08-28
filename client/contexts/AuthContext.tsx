@@ -45,15 +45,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    console.log('Login attempt:', { username, password: password ? '***' : 'empty' });
     // Simple authentication with hardcoded credentials
     if (username === 'admin' && password === 'admin') {
-      console.log('Login successful');
       setIsAuthenticated(true);
       localStorage.setItem('sbie-auth', 'authenticated');
       return true;
     }
-    console.log('Login failed - invalid credentials');
     return false;
   };
 
