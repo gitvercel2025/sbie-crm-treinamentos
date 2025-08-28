@@ -32,23 +32,37 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const mountedRef = useRef(true);
 
   // Check if user is already logged in on app start
   useEffect(() => {
-    const checkAuthStatus = () => {
+    const checkAuthStatus = async () => {
       try {
         const authStatus = localStorage.getItem("sbie-auth");
-        if (authStatus === "authenticated") {
+        if (authStatus === "authenticated" && mountedRef.current) {
           setIsAuthenticated(true);
         }
       } catch (error) {
         console.error("Error checking auth status:", error);
-      } finally {
-        setLoading(false);
       }
+
+      // Add small delay to prevent rapid state changes
+      timeoutRef.current = setTimeout(() => {
+        if (mountedRef.current) {
+          setLoading(false);
+        }
+      }, 100);
     };
 
     checkAuthStatus();
+
+    return () => {
+      mountedRef.current = false;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, []);
 
   const login = async (
