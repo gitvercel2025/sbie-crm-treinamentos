@@ -13,6 +13,7 @@ import Students from "./pages/Students";
 import Trainings from "./pages/Trainings";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
