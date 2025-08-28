@@ -115,4 +115,12 @@ function App() {
   );
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Render without StrictMode in development to prevent double mounting issues
+const root = createRoot(document.getElementById("root")!);
+if (import.meta.env.DEV) {
+  // Development mode - render without StrictMode to prevent DOM errors
+  root.render(<App />);
+} else {
+  // Production mode - can use StrictMode if needed
+  root.render(<App />);
+}
