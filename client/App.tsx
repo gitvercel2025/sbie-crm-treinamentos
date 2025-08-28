@@ -99,8 +99,7 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <Toaster />
-          <Sonner />
+          <ToastProvider />
           <ErrorBoundary>
             <AuthProvider>
               <ErrorBoundary>
