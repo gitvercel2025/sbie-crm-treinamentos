@@ -71,18 +71,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   ): Promise<boolean> => {
     // Simple authentication with hardcoded credentials
     if (username === "admin" && password === "admin") {
-      setIsAuthenticated(true);
-      localStorage.setItem("sbie-auth", "authenticated");
+      if (mountedRef.current) {
+        setIsAuthenticated(true);
+        localStorage.setItem("sbie-auth", "authenticated");
+      }
       return true;
     }
     return false;
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("sbie-auth");
-    // Clear all application data on logout
-    clearAllData();
+    if (mountedRef.current) {
+      setIsAuthenticated(false);
+      localStorage.removeItem("sbie-auth");
+      // Clear all application data on logout
+      clearAllData();
+    }
   };
 
   const value = {
