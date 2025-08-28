@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
-import Login from "@/pages/Login";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface ProtectedRouteProps {
   children: ReactNode;
