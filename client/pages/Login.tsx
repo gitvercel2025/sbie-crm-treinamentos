@@ -45,6 +45,7 @@ export default function Login() {
           title: "Login realizado com sucesso",
           description: "Bem-vindo ao sistema SBIE!",
         });
+        navigate('/', { replace: true });
       } else {
         toast({
           title: "Erro de autenticação",
