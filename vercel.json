@@ -2,15 +2,22 @@
   "version": 2,
   "buildCommand": "npm run build:client",
   "outputDirectory": "dist/spa",
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "@vercel/node@3.2.5"
-    }
-  },
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index"
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt"
+    },
+    {
+      "src": "/placeholder.svg",
+      "dest": "/placeholder.svg"
     },
     {
       "src": "/(.*)",
